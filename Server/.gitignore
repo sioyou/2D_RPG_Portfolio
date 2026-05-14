@@ -1,0 +1,43 @@
+# 빌드 아티팩트
+*.obj
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.idb
+*.lib
+*.log
+*.exp
+*.o
+*.out
+
+# Visual Studio 관련 파일
+.vscode/
+.vs/
+*.code-workspace
+
+# 빌드 폴더
+Debug/
+Release/
+x64/
+bin/
+build/
+
+# 사용자별 설정 파일
+*.user
+*.suo
+*.opendb
+*.VC.db
+
+# 패키지 및 캐시
+packages/
+*.nuget/
+*.cache/
+*.pidb
+*.tmp
+
+# 기타
+*.log
+*.swp
+*.DS_Store
+Thumbs.db
