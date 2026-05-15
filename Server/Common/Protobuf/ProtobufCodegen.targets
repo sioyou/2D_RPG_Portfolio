@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProtobufBinDir>$(MSBuildThisFileDirectory)bin\</ProtobufBinDir>
+    <ProtobufOutputDir>$(SolutionDir)GameServer\</ProtobufOutputDir>
+    <ProtobufUnityOutputDir>$(SolutionDir)..\Client\Assets\@Scripts\Packet\Generated\</ProtobufUnityOutputDir>
+    <ProtobufGeneratedCpp>$(ProtobufOutputDir)Enum.pb.cc;$(ProtobufOutputDir)Enum.pb.h;$(ProtobufOutputDir)Struct.pb.cc;$(ProtobufOutputDir)Struct.pb.h;$(ProtobufOutputDir)Protocol.pb.cc;$(ProtobufOutputDir)Protocol.pb.h;$(ProtobufOutputDir)ClientPacketHandler.h</ProtobufGeneratedCpp>
+    <ProtobufGeneratedCs>$(ProtobufUnityOutputDir)Enum.cs;$(ProtobufUnityOutputDir)Struct.cs;$(ProtobufUnityOutputDir)Protocol.cs;$(ProtobufUnityOutputDir)ServerPacketHandler.cs</ProtobufGeneratedCs>
+    <ProtobufInputs>$(ProtobufBinDir)Enum.proto;$(ProtobufBinDir)Struct.proto;$(ProtobufBinDir)Protocol.proto;$(ProtobufBinDir)GenPackets.bat;$(ProtobufBinDir)PacketGenerator.exe;$(ProtobufBinDir)Templates\PacketHandler.h;$(ProtobufBinDir)Templates\PacketHandler.cs</ProtobufInputs>
+  </PropertyGroup>
+
+  <!-- .proto / GenPackets.bat 변경 시에만 코드 생성 (매 빌드 PreBuild 대신) -->
+  <Target Name="GenerateProtobufPackets"
+          BeforeTargets="PrepareForBuild"
+          Inputs="$(ProtobufInputs)"
+          Outputs="$(ProtobufGeneratedCpp);$(ProtobufGeneratedCs)">
+    <Message Importance="high" Text="[Protobuf] .proto changed. Running GenPackets.bat..." />
+    <Exec Command="call &quot;$(ProtobufBinDir)GenPackets.bat&quot;"
+          WorkingDirectory="$(ProtobufBinDir)"
+          StandardOutputImportance="High"
+          StandardErrorImportance="High" />
+  </Target>
+
+  <ItemGroup>
+    <UpToDateCheckInput Include="$(ProtobufBinDir)Enum.proto" />
+    <UpToDateCheckInput Include="$(ProtobufBinDir)Struct.proto" />
+    <UpToDateCheckInput Include="$(ProtobufBinDir)Protocol.proto" />
+    <UpToDateCheckInput Include="$(ProtobufBinDir)GenPackets.bat" />
+    <UpToDateCheckInput Include="$(ProtobufBinDir)PacketGenerator.exe" />
+    <UpToDateCheckOutput Include="$(ProtobufGeneratedCpp)" />
+    <UpToDateCheckOutput Include="$(ProtobufGeneratedCs)" />
+  </ItemGroup>
+</Project>

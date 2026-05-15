@@ -112,11 +112,8 @@ public class UIManager
 
         GameObject go = Managers.Resource.Instantiate($"{name}");
         if (go == null)
-            go = CreateFallbackSceneUI<T>(name);
-
-        if (go == null)
         {
-            Debug.LogError($"Failed to create scene UI: {name}");
+            Debug.LogError($"Failed to load scene UI prefab: {name}");
             return null;
         }
 
@@ -126,15 +123,6 @@ public class UIManager
         go.transform.SetParent(Root.transform);
 
         return sceneUI;
-    }
-
-    static GameObject CreateFallbackSceneUI<T>(string name) where T : UI_Scene
-    {
-        if (typeof(T) == typeof(UI_TitleScene))
-            return SceneUIBuilder.CreateTitleSceneUI(name);
-
-        Debug.LogWarning($"No runtime fallback for scene UI type: {typeof(T).Name}");
-        return null;
     }
 
     public void CachePopupUI(Type type)

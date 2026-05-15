@@ -29,6 +29,7 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_reflection.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_Enum_2eproto
@@ -55,6 +56,56 @@ PROTOBUF_NAMESPACE_OPEN
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
 
+enum CreatureState : int {
+  CREATURE_STATE_IDLE = 0,
+  CreatureState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  CreatureState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool CreatureState_IsValid(int value);
+constexpr CreatureState CreatureState_MIN = CREATURE_STATE_IDLE;
+constexpr CreatureState CreatureState_MAX = CREATURE_STATE_IDLE;
+constexpr int CreatureState_ARRAYSIZE = CreatureState_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CreatureState_descriptor();
+template<typename T>
+inline const std::string& CreatureState_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, CreatureState>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function CreatureState_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    CreatureState_descriptor(), enum_t_value);
+}
+inline bool CreatureState_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, CreatureState* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<CreatureState>(
+    CreatureState_descriptor(), name, value);
+}
+enum GameObjectType : int {
+  OBJECT_TYPE_NONE = 0,
+  OBJECT_TYPE_PLAYER = 1,
+  OBJECT_TYPE_PROJECTILE = 2,
+  GameObjectType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  GameObjectType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool GameObjectType_IsValid(int value);
+constexpr GameObjectType GameObjectType_MIN = OBJECT_TYPE_NONE;
+constexpr GameObjectType GameObjectType_MAX = OBJECT_TYPE_PROJECTILE;
+constexpr int GameObjectType_ARRAYSIZE = GameObjectType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* GameObjectType_descriptor();
+template<typename T>
+inline const std::string& GameObjectType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, GameObjectType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function GameObjectType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    GameObjectType_descriptor(), enum_t_value);
+}
+inline bool GameObjectType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, GameObjectType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<GameObjectType>(
+    GameObjectType_descriptor(), name, value);
+}
 // ===================================================================
 
 
@@ -74,6 +125,21 @@ namespace Protocol {
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace Protocol
+
+PROTOBUF_NAMESPACE_OPEN
+
+template <> struct is_proto_enum< ::Protocol::CreatureState> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::CreatureState>() {
+  return ::Protocol::CreatureState_descriptor();
+}
+template <> struct is_proto_enum< ::Protocol::GameObjectType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::GameObjectType>() {
+  return ::Protocol::GameObjectType_descriptor();
+}
+
+PROTOBUF_NAMESPACE_CLOSE
 
 // @@protoc_insertion_point(global_scope)
 

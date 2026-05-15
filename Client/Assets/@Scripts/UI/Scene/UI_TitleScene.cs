@@ -66,12 +66,6 @@ public class UI_TitleScene : UI_Scene
 		BindObjects(typeof(GameObjects));
 		BindTexts(typeof(Texts));
 
-		GetObject((int)GameObjects.StartButton).BindEvent((evt) =>
-		{
-			Debug.Log("OnClick");
-			Managers.Scene.LoadScene(EScene.GameScene);
-		});
-
 		GetObject((int)GameObjects.StartButton).gameObject.SetActive(false);
 	}
 
@@ -90,20 +84,8 @@ public class UI_TitleScene : UI_Scene
 		Managers.Network.OnGameServerConnectFailed -= HandleConnectFailed;
 	}
 
-	protected override void Start()
-	{
-		base.Start();
-		BeginFlow();
-	}
-
-	void BeginFlow()
-	{
-		// Addressables Preload는 포트폴리오 리소스 전략 확정 후 연동
-		OnAssetLoaded();
-	}
-
-	void OnAssetLoaded()
-	{
+	public void BeginFlow()
+    {
 		State = TitleSceneState.AssetLoaded;
 		Managers.Data.Init();
 
@@ -115,7 +97,6 @@ public class UI_TitleScene : UI_Scene
 	void HandleConnected()
 	{
 		State = TitleSceneState.ConnectedToServer;
-		GetObject((int)GameObjects.StartButton).gameObject.SetActive(true);
 	}
 
 	void HandleConnectFailed()

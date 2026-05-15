@@ -3,13 +3,12 @@ guid: a5c49702a2e749fda32eb8c5fd0bae78
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 3
-  userData:
-  assetBundleName:
-  assetBundleVariant:
-  script: {fileID: 13804, guid: 0000000000000000e000000000000000, type: 0}
-  generateCSharpClass: 1
-  csharpClassName:
-  csharpNamespace:
-  csharpAssetPath:
-  generateSchemes: 0
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 8404be70184654265930450def6a9037, type: 3}
+  generateWrapperCode: 0
+  wrapperCodePath: 
+  wrapperClassName: 
+  wrapperCodeNamespace: 

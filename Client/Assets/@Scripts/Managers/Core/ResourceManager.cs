@@ -95,7 +95,7 @@ public class ResourceManager
         };
     }
 
-    public void LoadAllAsync<T>(string label, Action<string, int, int> callback) where T : UnityEngine.Object
+    public void LoadAllAsync<T>(string label, Action onCompleteCallback) where T : UnityEngine.Object
     {
         var opHandle = Addressables.LoadResourceLocationsAsync(label, typeof(T));
         opHandle.Completed += (op) =>
@@ -105,26 +105,28 @@ public class ResourceManager
 
             if (totalCount == 0)
             {
-                callback?.Invoke(string.Empty, 0, 0);
+                onCompleteCallback?.Invoke();
                 return;
             }
 
             foreach (var result in op.Result)
             {
-                if (result.ResourceType == typeof(Texture2D) ||  result.ResourceType == typeof(Sprite))
+                if (result.ResourceType == typeof(Texture2D) || result.ResourceType == typeof(Sprite))
                 {
                     LoadAsync<Sprite>(result.PrimaryKey, (obj) =>
                     {
                         loadCount++;
-                        callback?.Invoke(result.PrimaryKey, loadCount, totalCount);
+                        if (loadCount >= totalCount)
+                            onCompleteCallback?.Invoke();
                     });
                 }
                 else
-                { 
+                {
                     LoadAsync<T>(result.PrimaryKey, (obj) =>
                     {
                         loadCount++;
-                        callback?.Invoke(result.PrimaryKey, loadCount, totalCount);
+                        if (loadCount >= totalCount)
+                            onCompleteCallback?.Invoke();
                     });
                 }
             }
