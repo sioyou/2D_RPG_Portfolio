@@ -13,13 +13,14 @@ enum : uint16
 	C_S_LEAVE_GAME = 1014,
 	S_C_LEAVE_GAME = 1015,
 	S_C_SPAWN = 1016,
-	C_S_MOVE = 1017,
-	S_C_MOVE = 1018,
-	C_S_ATTACK = 1019,
-	S_C_ATTACK = 1020,
-	S_C_DIE = 1021,
-	C_S_CHAT = 1022,
-	S_C_CHAT = 1023,
+	S_C_DESPAWN = 1017,
+	C_S_MOVE = 1018,
+	S_C_MOVE = 1019,
+	C_S_ATTACK = 1020,
+	S_C_ATTACK = 1021,
+	S_C_DIE = 1022,
+	C_S_CHAT = 1023,
+	S_C_CHAT = 1024,
 };
 
 // Custom Handlers
@@ -55,6 +56,7 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::S_C_ENTER_GAME& pkt) { return MakeSendBuffer(pkt, S_C_ENTER_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_C_LEAVE_GAME& pkt) { return MakeSendBuffer(pkt, S_C_LEAVE_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_C_SPAWN& pkt) { return MakeSendBuffer(pkt, S_C_SPAWN); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_C_DESPAWN& pkt) { return MakeSendBuffer(pkt, S_C_DESPAWN); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_C_MOVE& pkt) { return MakeSendBuffer(pkt, S_C_MOVE); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_C_ATTACK& pkt) { return MakeSendBuffer(pkt, S_C_ATTACK); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_C_DIE& pkt) { return MakeSendBuffer(pkt, S_C_DIE); }

@@ -1,16 +1,24 @@
 #include "pch.h"
 #include "GameSession.h"
 #include "GameSessionManager.h"
+#include "PlayerManager.h"
 #include "ClientPacketHandler.h"
+
+GameSessionRef GameSession::GetGameSessionRef()
+{
+	return static_pointer_cast<GameSession>(GetPacketSessionRef());
+}
 
 void GameSession::OnConnected()
 {
-	GSessionManager.Add(static_pointer_cast<GameSession>(shared_from_this()));
+	GSessionManager.Add(GetGameSessionRef());
 }
 
 void GameSession::OnDisconnected()
 {
-	GSessionManager.Remove(static_pointer_cast<GameSession>(shared_from_this()));
+	GameSessionRef session = GetGameSessionRef();
+	GPlayerManager.Logout(session);
+	GSessionManager.Remove(session);
 }
 
 void GameSession::OnRecvPacket(BYTE* buffer, int32 len)

@@ -15,8 +15,26 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 00654c8f2d19dfe4b98f5e775268d615
   m_SerializeEntries:
+  - m_GUID: 4094012eb3f1a704993b0bb0c2afaefc
+    m_Address: UI_LoginPopup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e4732511eb455c46af69451aefab63d
+    m_Address: Monster
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 74cc5ae153047fd4f87cfefa5393bb88
     m_Address: EventSystem
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d69e67e8b9c862f42a18b68ce09069c5
+    m_Address: Player
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload

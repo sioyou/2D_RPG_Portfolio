@@ -13,13 +13,14 @@ public enum MsgId
     C_S_LEAVE_GAME = 1014,
     S_C_LEAVE_GAME = 1015,
     S_C_SPAWN = 1016,
-    C_S_MOVE = 1017,
-    S_C_MOVE = 1018,
-    C_S_ATTACK = 1019,
-    S_C_ATTACK = 1020,
-    S_C_DIE = 1021,
-    C_S_CHAT = 1022,
-    S_C_CHAT = 1023,
+    S_C_DESPAWN = 1017,
+    C_S_MOVE = 1018,
+    S_C_MOVE = 1019,
+    C_S_ATTACK = 1020,
+    S_C_ATTACK = 1021,
+    S_C_DIE = 1022,
+    C_S_CHAT = 1023,
+    S_C_CHAT = 1024,
 };
 
 class ServerPacketHandler
@@ -53,6 +54,8 @@ class ServerPacketHandler
         _handler.Add((ushort)MsgId.S_C_LEAVE_GAME, PacketHandler.S_C_LEAVE_GAMEHandler);
         _onRecv.Add((ushort)MsgId.S_C_SPAWN, MakePacket<S_C_SPAWN>);
         _handler.Add((ushort)MsgId.S_C_SPAWN, PacketHandler.S_C_SPAWNHandler);
+        _onRecv.Add((ushort)MsgId.S_C_DESPAWN, MakePacket<S_C_DESPAWN>);
+        _handler.Add((ushort)MsgId.S_C_DESPAWN, PacketHandler.S_C_DESPAWNHandler);
         _onRecv.Add((ushort)MsgId.S_C_MOVE, MakePacket<S_C_MOVE>);
         _handler.Add((ushort)MsgId.S_C_MOVE, PacketHandler.S_C_MOVEHandler);
         _onRecv.Add((ushort)MsgId.S_C_ATTACK, MakePacket<S_C_ATTACK>);

@@ -25,9 +25,10 @@ namespace Protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CgpFbnVtLnByb3RvEghQcm90b2NvbCooCg1DcmVhdHVyZVN0YXRlEhcKE0NS",
-            "RUFUVVJFX1NUQVRFX0lETEUQACpaCg5HYW1lT2JqZWN0VHlwZRIUChBPQkpF",
+            "RUFUVVJFX1NUQVRFX0lETEUQACpzCg5HYW1lT2JqZWN0VHlwZRIUChBPQkpF",
             "Q1RfVFlQRV9OT05FEAASFgoST0JKRUNUX1RZUEVfUExBWUVSEAESGgoWT0JK",
-            "RUNUX1RZUEVfUFJPSkVDVElMRRACYgZwcm90bzM="));
+            "RUNUX1RZUEVfUFJPSkVDVElMRRACEhcKE09CSkVDVF9UWVBFX01PTlNURVIQ",
+            "A2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.CreatureState), typeof(global::Protocol.GameObjectType), }, null, null));
@@ -44,6 +45,7 @@ namespace Protocol {
     [pbr::OriginalName("OBJECT_TYPE_NONE")] ObjectTypeNone = 0,
     [pbr::OriginalName("OBJECT_TYPE_PLAYER")] ObjectTypePlayer = 1,
     [pbr::OriginalName("OBJECT_TYPE_PROJECTILE")] ObjectTypeProjectile = 2,
+    [pbr::OriginalName("OBJECT_TYPE_MONSTER")] ObjectTypeMonster = 3,
   }
 
   #endregion

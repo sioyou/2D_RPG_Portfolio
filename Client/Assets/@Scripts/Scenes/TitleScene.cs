@@ -38,7 +38,8 @@ public class TitleScene : BaseScene
 
     void OnPreloadComplete()
     {
-        Managers.Network.OnGameServerConnected += HandleGameServerConnected;
+        Managers.Network.OnLoginSuccess += HandleLoginSuccess;
+        Managers.Network.OnLoginFailed += HandleLoginFailed;
         Managers.Network.OnGameServerConnectFailed += HandleGameServerConnectFailed;
 
         UI_TitleScene ui = FindFirstObjectByType<UI_TitleScene>();
@@ -53,12 +54,17 @@ public class TitleScene : BaseScene
         if (ui != null)
             ui.BeginFlow();
         else
-            Managers.Network.ConnectGameServer();
+            Debug.LogError("[TitleScene] UI_TitleScene not found.");
     }
 
-    void HandleGameServerConnected()
+    void HandleLoginSuccess()
     {
         Managers.Scene.LoadScene(Define.EScene.GameScene);
+    }
+
+    void HandleLoginFailed()
+    {
+        Debug.LogWarning("[TitleScene] Login failed.");
     }
 
     void HandleGameServerConnectFailed()
@@ -71,8 +77,7 @@ public class TitleScene : BaseScene
         if (Managers.Initialized == false)
             return;
 
-        Managers.Network.OnGameServerConnected -= HandleGameServerConnected;
-        Managers.Network.OnGameServerConnectFailed -= HandleGameServerConnectFailed;
+        UnsubscribeNetworkEvents();
     }
 
     public override void Clear()
@@ -80,7 +85,13 @@ public class TitleScene : BaseScene
         if (Managers.Initialized == false)
             return;
 
-        Managers.Network.OnGameServerConnected -= HandleGameServerConnected;
+        UnsubscribeNetworkEvents();
+    }
+
+    void UnsubscribeNetworkEvents()
+    {
+        Managers.Network.OnLoginSuccess -= HandleLoginSuccess;
+        Managers.Network.OnLoginFailed -= HandleLoginFailed;
         Managers.Network.OnGameServerConnectFailed -= HandleGameServerConnectFailed;
     }
 }

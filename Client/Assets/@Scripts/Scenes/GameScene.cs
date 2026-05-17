@@ -3,6 +3,8 @@ using static Define;
 
 public class GameScene : BaseScene
 {
+    bool _leaveSent;
+
     protected override void Awake()
     {
         base.Awake();
@@ -15,14 +17,33 @@ public class GameScene : BaseScene
     {
         base.Start();
         Managers.Init();
+        Managers.Network.SendEnterGame();
     }
 
-	public override void Clear()
+    public override void Clear()
     {
+        Managers.Object.Clear();
     }
-	
-	void OnApplicationQuit()
-	{
-		Managers.Network.GameServer.Disconnect();
-	}
+
+    void OnApplicationQuit()
+    {
+        LeaveGame();
+    }
+
+    void OnDestroy()
+    {
+        if (SceneType != EScene.GameScene)
+            return;
+
+        LeaveGame();
+    }
+
+    void LeaveGame()
+    {
+        if (_leaveSent)
+            return;
+
+        _leaveSent = true;
+        Managers.Network.LeaveGameAndDisconnect();
+    }
 }

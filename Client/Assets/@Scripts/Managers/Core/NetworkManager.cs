@@ -1,9 +1,10 @@
+using Google.Protobuf;
 using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using Protocol;
 using UnityEngine;
-using Google.Protobuf;
 
 public enum EServerType
 {
@@ -93,25 +94,140 @@ public class NetworkManager
 {
     public ServerInstance GameServer { get; } = new ServerInstance();
 
+    public string PlayerId { get; set; } = "Player1";
+
     public event Action OnGameServerConnected;
     public event Action OnGameServerConnectFailed;
+    public event Action OnLoginSuccess;
+    public event Action OnLoginFailed;
+    public event Action OnEnterGameSuccess;
+    public event Action OnEnterGameFailed;
 
-    public void ConnectGameServer(string ip = "127.0.0.1", int port = 7777)
+    public void ConnectGameServer(string ip = "127.0.0.1", int port = 7777, string playerId = "Test")
     {
+        if (string.IsNullOrEmpty(playerId) == false)
+            PlayerId = playerId;
+
         IPAddress ipAddr = IPAddress.Parse(ip);
         IPEndPoint endPoint = new IPEndPoint(ipAddr, port);
         GameServer.Connect(endPoint, OnConnectionSuccess, OnConnectionFailed);
     }
 
+    public void SendLogin(string playerId = null)
+    {
+        if (GameServer.IsConnected() == false)
+        {
+            Debug.LogWarning("[NetworkManager] SendLogin failed: not connected to game server.");
+            return;
+        }
+
+        string id = string.IsNullOrEmpty(playerId) ? PlayerId : playerId;
+        if (string.IsNullOrEmpty(id))
+        {
+            Debug.LogError("[NetworkManager] SendLogin failed: playerId is empty.");
+            return;
+        }
+
+        PlayerId = id;
+
+        C_S_LOGIN packet = new C_S_LOGIN
+        {
+            PlayerId = id,
+        };
+
+        Send(packet);
+        Debug.Log($"[NetworkManager] C_S_LOGIN sent. playerId={id}");
+    }
+
+    public void HandleLoginResponse(bool success)
+    {
+        if (success)
+        {
+            Debug.Log("[NetworkManager] Login success.");
+            OnLoginSuccess?.Invoke();
+        }
+        else
+        {
+            Debug.LogWarning("[NetworkManager] Login failed.");
+            OnLoginFailed?.Invoke();
+        }
+    }
+
+    public void SendEnterGame()
+    {
+        if (GameServer.IsConnected() == false)
+        {
+            Debug.LogWarning("[NetworkManager] SendEnterGame failed: not connected.");
+            return;
+        }
+
+        Send(new C_S_ENTER_GAME());
+        Debug.Log("[NetworkManager] C_S_ENTER_GAME sent.");
+    }
+
+    public void HandleEnterGameResponse(bool success, int myObjectId, Google.Protobuf.Collections.RepeatedField<ObjectInfo> spawns)
+    {
+        if (success)
+        {
+            Managers.Game.SetMyObjectId(myObjectId);
+            Managers.Object.SpawnAll(spawns);
+            Debug.Log($"[NetworkManager] Enter game success. myObjectId={myObjectId} spawnCount={spawns?.Count ?? 0}");
+            OnEnterGameSuccess?.Invoke();
+        }
+        else
+        {
+            Debug.LogWarning("[NetworkManager] Enter game failed.");
+            OnEnterGameFailed?.Invoke();
+        }
+    }
+
+    public void SendLeaveGame()
+    {
+        if (GameServer.IsConnected() == false)
+        {
+            Debug.LogWarning("[NetworkManager] SendLeaveGame failed: not connected.");
+            return;
+        }
+
+        Send(new C_S_LEAVE_GAME());
+        Debug.Log("[NetworkManager] C_S_LEAVE_GAME sent.");
+    }
+
+    public void HandleLeaveGameResponse(bool success)
+    {
+        if (success == false)
+        {
+            Debug.LogWarning("[NetworkManager] Leave game failed.");
+            return;
+        }
+
+        Debug.Log("[NetworkManager] Leave game success.");
+        Managers.Object.Clear();
+    }
+
+    public void LeaveGameAndDisconnect()
+    {
+        if (Managers.Initialized == false)
+            return;
+
+        if (GameServer.IsConnected())
+        {
+            SendLeaveGame();
+            GameServer.Disconnect();
+        }
+
+        Managers.Object.Clear();
+    }
+
     private void OnConnectionSuccess()
     {
-        Debug.Log("Connected To Server");
+        Debug.Log("[NetworkManager] Connected to game server.");
         OnGameServerConnected?.Invoke();
     }
 
     private void OnConnectionFailed()
     {
-        Debug.Log("Failed To Connect To Server");
+        Debug.LogWarning("[NetworkManager] Failed to connect to game server.");
         OnGameServerConnectFailed?.Invoke();
     }
 

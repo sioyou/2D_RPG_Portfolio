@@ -1,13 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UnityEngine;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 public class GameManager
 {
+    public int MyObjectId { get; set; }
+    public PlayerObject MyPlayer { get; set; }
 
+    public void Reset()
+    {
+        MyObjectId = 0;
+        MyPlayer = null;
+    }
 
+    public void SetMyObjectId(int objectId)
+    {
+        MyObjectId = objectId;
+
+        GameObject go = Managers.Object.FindById(objectId);
+        if (go != null && go.TryGetComponent(out PlayerObject playerObject))
+            MyPlayer = playerObject;
+    }
 }
