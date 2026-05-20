@@ -114,7 +114,11 @@ struct S_C_DESPAWNDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_C_DESPAWNDefaultTypeInternal _S_C_DESPAWN_default_instance_;
 constexpr C_S_MOVE::C_S_MOVE(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : posx_(0)
+  , posy_(0)
+  , dirx_(0)
+  , diry_(0){}
 struct C_S_MOVEDefaultTypeInternal {
   constexpr C_S_MOVEDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -125,7 +129,12 @@ struct C_S_MOVEDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C_S_MOVEDefaultTypeInternal _C_S_MOVE_default_instance_;
 constexpr S_C_MOVE::S_C_MOVE(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : objectid_(0)
+  , posx_(0)
+  , posy_(0)
+  , state_(0)
+{}
 struct S_C_MOVEDefaultTypeInternal {
   constexpr S_C_MOVEDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -254,11 +263,19 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Protocol_2eproto::offsets[] PR
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_S_MOVE, posx_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_S_MOVE, posy_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_S_MOVE, dirx_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_S_MOVE, diry_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, objectid_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, posx_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, posy_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, state_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_S_ATTACK, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -300,12 +317,12 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 36, -1, sizeof(::Protocol::S_C_SPAWN)},
   { 42, -1, sizeof(::Protocol::S_C_DESPAWN)},
   { 48, -1, sizeof(::Protocol::C_S_MOVE)},
-  { 53, -1, sizeof(::Protocol::S_C_MOVE)},
-  { 58, -1, sizeof(::Protocol::C_S_ATTACK)},
-  { 63, -1, sizeof(::Protocol::S_C_ATTACK)},
-  { 68, -1, sizeof(::Protocol::S_C_DIE)},
-  { 73, -1, sizeof(::Protocol::C_S_CHAT)},
-  { 80, -1, sizeof(::Protocol::S_C_CHAT)},
+  { 57, -1, sizeof(::Protocol::S_C_MOVE)},
+  { 66, -1, sizeof(::Protocol::C_S_ATTACK)},
+  { 71, -1, sizeof(::Protocol::S_C_ATTACK)},
+  { 76, -1, sizeof(::Protocol::S_C_DIE)},
+  { 81, -1, sizeof(::Protocol::C_S_CHAT)},
+  { 88, -1, sizeof(::Protocol::S_C_CHAT)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -336,11 +353,14 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "ME\"!\n\016S_C_LEAVE_GAME\022\017\n\007success\030\001 \001(\010\"/\n"
   "\tS_C_SPAWN\022\"\n\004info\030\001 \001(\0132\024.Protocol.Obje"
   "ctInfo\"\037\n\013S_C_DESPAWN\022\020\n\010objectId\030\001 \001(\005\""
-  "\n\n\010C_S_MOVE\"\n\n\010S_C_MOVE\"\014\n\nC_S_ATTACK\"\014\n"
-  "\nS_C_ATTACK\"\t\n\007S_C_DIE\")\n\010C_S_CHAT\022\013\n\003ms"
-  "g\030\001 \001(\t\022\020\n\010chatType\030\002 \001(\005\";\n\010S_C_CHAT\022\020\n"
-  "\010objectId\030\001 \001(\005\022\013\n\003msg\030\002 \001(\t\022\020\n\010chatType"
-  "\030\003 \001(\005b\006proto3"
+  "B\n\010C_S_MOVE\022\014\n\004posX\030\001 \001(\002\022\014\n\004posY\030\002 \001(\002\022"
+  "\014\n\004dirX\030\003 \001(\002\022\014\n\004dirY\030\004 \001(\002\"`\n\010S_C_MOVE\022"
+  "\020\n\010objectId\030\001 \001(\005\022\014\n\004posX\030\002 \001(\002\022\014\n\004posY\030"
+  "\003 \001(\002\022&\n\005state\030\004 \001(\0162\027.Protocol.Creature"
+  "State\"\014\n\nC_S_ATTACK\"\014\n\nS_C_ATTACK\"\t\n\007S_C"
+  "_DIE\")\n\010C_S_CHAT\022\013\n\003msg\030\001 \001(\t\022\020\n\010chatTyp"
+  "e\030\002 \001(\005\";\n\010S_C_CHAT\022\020\n\010objectId\030\001 \001(\005\022\013\n"
+  "\003msg\030\002 \001(\t\022\020\n\010chatType\030\003 \001(\005b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -348,7 +368,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Protocol_2eproto = {
-  false, false, 534, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
+  false, false, 676, descriptor_table_protodef_Protocol_2eproto, "Protocol.proto", 
   &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 15,
   schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
   file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto, file_level_service_descriptors_Protocol_2eproto,
@@ -1932,10 +1952,17 @@ C_S_MOVE::C_S_MOVE(::PROTOBUF_NAMESPACE_ID::Arena* arena)
 C_S_MOVE::C_S_MOVE(const C_S_MOVE& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&posx_, &from.posx_,
+    static_cast<size_t>(reinterpret_cast<char*>(&diry_) -
+    reinterpret_cast<char*>(&posx_)) + sizeof(diry_));
   // @@protoc_insertion_point(copy_constructor:Protocol.C_S_MOVE)
 }
 
 void C_S_MOVE::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&posx_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&diry_) -
+    reinterpret_cast<char*>(&posx_)) + sizeof(diry_));
 }
 
 C_S_MOVE::~C_S_MOVE() {
@@ -1964,6 +1991,9 @@ void C_S_MOVE::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  ::memset(&posx_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&diry_) -
+      reinterpret_cast<char*>(&posx_)) + sizeof(diry_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1972,6 +2002,37 @@ const char* C_S_MOVE::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // float posX = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 13)) {
+          posx_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else goto handle_unusual;
+        continue;
+      // float posY = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 21)) {
+          posy_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else goto handle_unusual;
+        continue;
+      // float dirX = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 29)) {
+          dirx_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else goto handle_unusual;
+        continue;
+      // float dirY = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 37)) {
+          diry_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
           CHK_(ptr);
           ctx->SetLastTag(tag);
@@ -1982,6 +2043,8 @@ const char* C_S_MOVE::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
             ptr, ctx);
         CHK_(ptr != nullptr);
         continue;
+      }
+    }  // switch
   }  // while
 success:
   return ptr;
@@ -1996,6 +2059,30 @@ failure:
   // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_S_MOVE)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
+
+  // float posX = 1;
+  if (!(this->posx() <= 0 && this->posx() >= 0)) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(1, this->_internal_posx(), target);
+  }
+
+  // float posY = 2;
+  if (!(this->posy() <= 0 && this->posy() >= 0)) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(2, this->_internal_posy(), target);
+  }
+
+  // float dirX = 3;
+  if (!(this->dirx() <= 0 && this->dirx() >= 0)) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(3, this->_internal_dirx(), target);
+  }
+
+  // float dirY = 4;
+  if (!(this->diry() <= 0 && this->diry() >= 0)) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(4, this->_internal_diry(), target);
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -2012,6 +2099,26 @@ size_t C_S_MOVE::ByteSizeLong() const {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // float posX = 1;
+  if (!(this->posx() <= 0 && this->posx() >= 0)) {
+    total_size += 1 + 4;
+  }
+
+  // float posY = 2;
+  if (!(this->posy() <= 0 && this->posy() >= 0)) {
+    total_size += 1 + 4;
+  }
+
+  // float dirX = 3;
+  if (!(this->dirx() <= 0 && this->dirx() >= 0)) {
+    total_size += 1 + 4;
+  }
+
+  // float dirY = 4;
+  if (!(this->diry() <= 0 && this->diry() >= 0)) {
+    total_size += 1 + 4;
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
@@ -2044,6 +2151,18 @@ void C_S_MOVE::MergeFrom(const C_S_MOVE& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!(from.posx() <= 0 && from.posx() >= 0)) {
+    _internal_set_posx(from._internal_posx());
+  }
+  if (!(from.posy() <= 0 && from.posy() >= 0)) {
+    _internal_set_posy(from._internal_posy());
+  }
+  if (!(from.dirx() <= 0 && from.dirx() >= 0)) {
+    _internal_set_dirx(from._internal_dirx());
+  }
+  if (!(from.diry() <= 0 && from.diry() >= 0)) {
+    _internal_set_diry(from._internal_diry());
+  }
 }
 
 void C_S_MOVE::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -2067,6 +2186,12 @@ bool C_S_MOVE::IsInitialized() const {
 void C_S_MOVE::InternalSwap(C_S_MOVE* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(C_S_MOVE, diry_)
+      + sizeof(C_S_MOVE::diry_)
+      - PROTOBUF_FIELD_OFFSET(C_S_MOVE, posx_)>(
+          reinterpret_cast<char*>(&posx_),
+          reinterpret_cast<char*>(&other->posx_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata C_S_MOVE::GetMetadata() const {
@@ -2090,10 +2215,17 @@ S_C_MOVE::S_C_MOVE(::PROTOBUF_NAMESPACE_ID::Arena* arena)
 S_C_MOVE::S_C_MOVE(const S_C_MOVE& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&objectid_, &from.objectid_,
+    static_cast<size_t>(reinterpret_cast<char*>(&state_) -
+    reinterpret_cast<char*>(&objectid_)) + sizeof(state_));
   // @@protoc_insertion_point(copy_constructor:Protocol.S_C_MOVE)
 }
 
 void S_C_MOVE::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&objectid_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&state_) -
+    reinterpret_cast<char*>(&objectid_)) + sizeof(state_));
 }
 
 S_C_MOVE::~S_C_MOVE() {
@@ -2122,6 +2254,9 @@ void S_C_MOVE::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  ::memset(&objectid_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&state_) -
+      reinterpret_cast<char*>(&objectid_)) + sizeof(state_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2130,6 +2265,38 @@ const char* S_C_MOVE::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 objectId = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          objectid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // float posX = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 21)) {
+          posx_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else goto handle_unusual;
+        continue;
+      // float posY = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 29)) {
+          posy_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.CreatureState state = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_state(static_cast<::Protocol::CreatureState>(val));
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
           CHK_(ptr);
           ctx->SetLastTag(tag);
@@ -2140,6 +2307,8 @@ const char* S_C_MOVE::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
             ptr, ctx);
         CHK_(ptr != nullptr);
         continue;
+      }
+    }  // switch
   }  // while
 success:
   return ptr;
@@ -2154,6 +2323,31 @@ failure:
   // @@protoc_insertion_point(serialize_to_array_start:Protocol.S_C_MOVE)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
+
+  // int32 objectId = 1;
+  if (this->objectid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_objectid(), target);
+  }
+
+  // float posX = 2;
+  if (!(this->posx() <= 0 && this->posx() >= 0)) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(2, this->_internal_posx(), target);
+  }
+
+  // float posY = 3;
+  if (!(this->posy() <= 0 && this->posy() >= 0)) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(3, this->_internal_posy(), target);
+  }
+
+  // .Protocol.CreatureState state = 4;
+  if (this->state() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      4, this->_internal_state(), target);
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -2170,6 +2364,29 @@ size_t S_C_MOVE::ByteSizeLong() const {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // int32 objectId = 1;
+  if (this->objectid() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_objectid());
+  }
+
+  // float posX = 2;
+  if (!(this->posx() <= 0 && this->posx() >= 0)) {
+    total_size += 1 + 4;
+  }
+
+  // float posY = 3;
+  if (!(this->posy() <= 0 && this->posy() >= 0)) {
+    total_size += 1 + 4;
+  }
+
+  // .Protocol.CreatureState state = 4;
+  if (this->state() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_state());
+  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
@@ -2202,6 +2419,18 @@ void S_C_MOVE::MergeFrom(const S_C_MOVE& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.objectid() != 0) {
+    _internal_set_objectid(from._internal_objectid());
+  }
+  if (!(from.posx() <= 0 && from.posx() >= 0)) {
+    _internal_set_posx(from._internal_posx());
+  }
+  if (!(from.posy() <= 0 && from.posy() >= 0)) {
+    _internal_set_posy(from._internal_posy());
+  }
+  if (from.state() != 0) {
+    _internal_set_state(from._internal_state());
+  }
 }
 
 void S_C_MOVE::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -2225,6 +2454,12 @@ bool S_C_MOVE::IsInitialized() const {
 void S_C_MOVE::InternalSwap(S_C_MOVE* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(S_C_MOVE, state_)
+      + sizeof(S_C_MOVE::state_)
+      - PROTOBUF_FIELD_OFFSET(S_C_MOVE, objectid_)>(
+          reinterpret_cast<char*>(&objectid_),
+          reinterpret_cast<char*>(&other->objectid_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata S_C_MOVE::GetMetadata() const {

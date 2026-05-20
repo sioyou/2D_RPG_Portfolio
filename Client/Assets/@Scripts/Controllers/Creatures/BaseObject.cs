@@ -1,12 +1,20 @@
 using Protocol;
 using UnityEngine;
 
-public abstract class BaseObject : MonoBehaviour
+public class BaseObject : MonoBehaviour
 {
     public ObjectInfo Info { get; private set; }
 
+    public float MoveSpeed = 5f;
+
     public bool IsMyPlayer =>
         Info != null && Info.ObjectId == Managers.Game.MyObjectId;
+
+    protected virtual void Awake() { }
+
+    protected virtual void Start() { }
+
+    protected virtual void Update() { }
 
     public void SetInfo(ObjectInfo info)
     {

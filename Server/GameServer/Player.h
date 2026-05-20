@@ -31,6 +31,13 @@ public:
 	uint64 GetLoginTick() const { return _loginTick; }
 	void SetLoginTick(uint64 tick) { _loginTick = tick; }
 
+	void SetMoveDirection(float dirX, float dirY);
+	float GetMoveDirX() const { return _moveDirX; }
+	float GetMoveDirY() const { return _moveDirY; }
+
+	uint64 GetLastMoveTick() const { return _lastMoveTick; }
+	void SetLastMoveTick(uint64 tick) { _lastMoveTick = tick; }
+
 private:
 	string _playerId;
 	int32 _objectId = 0;
@@ -39,6 +46,10 @@ private:
 
 	CreatureStat _stat;
 
+	float _moveDirX = 0.f;
+	float _moveDirY = 0.f;
+
+	uint64 _lastMoveTick = 0;
 	uint64 _loginTick = 0;
 	weak_ptr<class GameSession> _session;
 };

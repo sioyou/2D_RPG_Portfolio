@@ -3,20 +3,37 @@ using UnityEngine;
 public class GameManager
 {
     public int MyObjectId { get; set; }
-    public PlayerObject MyPlayer { get; set; }
+    public MyPlayerObject MyPlayerObject { get; private set; }
 
     public void Reset()
     {
         MyObjectId = 0;
-        MyPlayer = null;
+        MyPlayerObject = null;
     }
 
     public void SetMyObjectId(int objectId)
     {
         MyObjectId = objectId;
+        TryBindExistingMyHero();
+    }
 
-        GameObject go = Managers.Object.FindById(objectId);
-        if (go != null && go.TryGetComponent(out PlayerObject playerObject))
-            MyPlayer = playerObject;
+    public void BindMyHero(MyPlayerObject myPlayerObject)
+    {
+        MyPlayerObject = myPlayerObject;
+    }
+
+    public void ClearMyHero()
+    {
+        MyPlayerObject = null;
+    }
+
+    public void TryBindExistingMyHero()
+    {
+        if (MyObjectId <= 0)
+            return;
+
+        MyPlayerObject existing = Managers.Object.Find<MyPlayerObject>(MyObjectId);
+        if (existing != null)
+            MyPlayerObject = existing;
     }
 }

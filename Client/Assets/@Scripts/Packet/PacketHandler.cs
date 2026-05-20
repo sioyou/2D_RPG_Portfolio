@@ -59,7 +59,15 @@ public static class PacketHandler
 
     public static void S_C_MOVEHandler(PacketSession session, IMessage packet)
     {
-        Debug.Log("S_C_MOVE");
+        var pkt = packet as S_C_MOVE;
+        if (pkt == null)
+            return;
+
+        CreatureObject creature= Managers.Object.Find<CreatureObject>(pkt.ObjectId);
+        if (creature == null)
+            return;
+
+        creature.ApplyDestPosition(new Vector2(pkt.PosX, pkt.PosY));
     }
 
     public static void S_C_ATTACKHandler(PacketSession session, IMessage packet)

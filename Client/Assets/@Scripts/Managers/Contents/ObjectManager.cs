@@ -76,8 +76,8 @@ public class ObjectManager
         if (_objects.TryGetValue(objectId, out GameObject go) == false)
             return;
 
-        if (Managers.Game.MyPlayer != null && go == Managers.Game.MyPlayer.gameObject)
-            Managers.Game.MyPlayer = null;
+        if (Managers.Game.MyPlayerObject != null && go == Managers.Game.MyPlayerObject.gameObject)
+            Managers.Game.ClearMyHero();
 
         _objects.Remove(objectId);
         Managers.Resource.Destroy(go);
@@ -124,19 +124,13 @@ public class ObjectManager
         switch (info.ObjectType)
         {
             case GameObjectType.ObjectTypePlayer:
-            {
-                if (go.TryGetComponent(out PlayerObject playerObject))
-                    return playerObject;
-
-                RemoveOtherObjectComponents<PlayerObject>(go);
-                return go.AddComponent<PlayerObject>();
-            }
+                return AttachHeroComponent(go, info);
             case GameObjectType.ObjectTypeMonster:
             {
-                if (go.TryGetComponent(out MonsterObject monsterObject))
-                    return monsterObject;
+                if (go.TryGetComponent(out MonsterObject monster))
+                    return monster;
 
-                RemoveOtherObjectComponents<MonsterObject>(go);
+                RemoveAllObjectComponents(go);
                 return go.AddComponent<MonsterObject>();
             }
             default:
@@ -145,16 +139,31 @@ public class ObjectManager
         }
     }
 
-    static void RemoveOtherObjectComponents<T>(GameObject go) where T : BaseObject
+    static BaseObject AttachHeroComponent(GameObject go, ObjectInfo info)
+    {
+        bool isMyHero = Managers.Game.MyObjectId > 0 && info.ObjectId == Managers.Game.MyObjectId;
+
+        if (isMyHero)
+        {
+            if (go.TryGetComponent(out MyPlayerObject myHero))
+                return myHero;
+
+            RemoveAllObjectComponents(go);
+            return go.AddComponent<MyPlayerObject>();
+        }
+
+        if (go.TryGetComponent(out PlayerObject hero))
+            return hero;
+
+        RemoveAllObjectComponents(go);
+        return go.AddComponent<PlayerObject>();
+    }
+
+    static void RemoveAllObjectComponents(GameObject go)
     {
         BaseObject[] components = go.GetComponents<BaseObject>();
         foreach (BaseObject component in components)
-        {
-            if (component is T)
-                continue;
-
             UnityEngine.Object.Destroy(component);
-        }
     }
 
     GameObject TryInstantiatePrefab(ObjectInfo info, Transform parent)

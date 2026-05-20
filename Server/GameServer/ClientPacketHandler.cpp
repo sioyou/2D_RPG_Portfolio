@@ -68,7 +68,35 @@ bool Handle_C_S_LEAVE_GAME(PacketSessionRef& session, Protocol::C_S_LEAVE_GAME& 
 
 bool Handle_C_S_MOVE(PacketSessionRef& session, Protocol::C_S_MOVE& pkt)
 {
+	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+	PlayerRef player = GPlayerManager.FindBySession(gameSession);
+	if (player == nullptr)
+		return false;
 
+	if (player->GetState() != EPlayerState::InGame)
+		return false;
+
+	ZoneRef zone = GZoneManager.GetZone(player->GetZoneId());
+	if (zone == nullptr)
+		return false;
+
+	float validatedX = 0.f;
+	float validatedY = 0.f;
+	zone->ValidateClientPosition(player, pkt.posx(), pkt.posy(), validatedX, validatedY);
+
+	player->GetStat().SetPosition(validatedX, validatedY);
+	player->SetMoveDirection(pkt.dirx(), pkt.diry());
+
+	Protocol::S_C_MOVE movePkt;
+	movePkt.set_objectid(player->GetObjectId());
+	movePkt.set_posx(validatedX);
+	movePkt.set_posy(validatedY);
+
+	const bool isMoving = (player->GetMoveDirX() != 0.f || player->GetMoveDirY() != 0.f);
+	movePkt.set_state(isMoving ? Protocol::CREATURE_STATE_MOVE : Protocol::CREATURE_STATE_IDLE);
+
+	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(movePkt);
+	zone->Broadcast(sendBuffer);
 	return true;
 }
 

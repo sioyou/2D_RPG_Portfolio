@@ -26,7 +26,7 @@
                 {
                     "name": "Interact",
                     "type": "Button",
-                    "id": "d2e4bc5e-8f6b-4c9e-ad1f-4b8e9c6g3f2b",
+                    "id": "d2e4bc5e-8f6b-4c9e-ad1f-4b8e9c603f2b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -36,7 +36,7 @@
             "bindings": [
                 {
                     "name": "WASD",
-                    "id": "e3f5cd6f-9g7c-4d0f-be2g-5c9f0d7h4g3c",
+                    "id": "e3f5cd6f-9a7c-4d0f-be2a-5c9f0d7a4a3c",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -47,7 +47,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "f4g6de7g-0h8d-4e1g-cf3h-6d0g1e8i5h4d",
+                    "id": "f4a6de7a-0a8d-4e1a-cf3a-6d0a1e8a5a4d",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -58,7 +58,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "g5h7ef8h-1i9e-4f2h-dg4i-7e1h2f9j6i5e",
+                    "id": "a5b7ef8b-1b9e-4f2b-da4b-7e1b2f9a6b5e",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
@@ -69,7 +69,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "h6i8fg9i-2j0f-4g3i-eh5j-8f2i3g0k7j6f",
+                    "id": "b6c8fa9c-2c0f-4a3c-eb5c-8f2c3a0b7c6f",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -80,7 +80,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "i7j9gh0j-3k1g-4h4j-fi6k-9g3j4h1l8k7g",
+                    "id": "c7d9ab0d-3d1a-4b4d-fc6d-9a3d4b1c8d7a",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -91,7 +91,7 @@
                 },
                 {
                     "name": "Arrow Keys",
-                    "id": "j8k0hi1k-4l2h-4i5k-gj7l-0h4k5i2m9l8h",
+                    "id": "d8e0bc1e-4e2b-4c5e-ad7e-0b4e5c2d9e8b",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -102,7 +102,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "k9l1ij2l-5m3i-4j6l-hk8m-1i5l6j3n0m9i",
+                    "id": "e9f1cd2f-5f3c-4d6f-be8f-1c5f6d3e0f9c",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
@@ -113,7 +113,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "l0m2jk3m-6n4j-4k7m-il9n-2j6m7k4o1n0j",
+                    "id": "f0a2de3a-6a4d-4e7a-cf9a-2d6a7e4f1a0d",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
@@ -124,7 +124,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "m1n3kl4n-7o5k-4l8n-jm0o-3k7n8l5p2o1k",
+                    "id": "a1b3ef4b-7b5e-4f8b-da0b-3e7b8f5a2b1e",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
@@ -135,7 +135,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "n2o4lm5o-8p6l-4m9o-kn1p-4l8o9m6q3p2l",
+                    "id": "b2c4fa5c-8c6f-4a9c-eb1c-4f8c9a6b3c2f",
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
@@ -146,7 +146,7 @@
                 },
                 {
                     "name": "Gamepad Left Stick",
-                    "id": "o3p5mn6p-9q7m-4n0p-lo2q-5m9p0n7r4q3m",
+                    "id": "c3d5ab6d-9d7a-4b0d-fc2d-5a9d0b7c4d3a",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
@@ -157,7 +157,7 @@
                 },
                 {
                     "name": "",
-                    "id": "p4q6no7q-0r8n-4o1q-mp3r-6n0q1o8s5r4n",
+                    "id": "d4e6bc7e-0e8b-4c1e-ad3e-6b0e1c8d5e4b",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -168,7 +168,7 @@
                 },
                 {
                     "name": "",
-                    "id": "q5r7op8r-1s9o-4p2r-nq4s-7o1r2p9t6s5o",
+                    "id": "e5f7cd8f-1f9c-4d2f-be4f-7c1f2d9e6f5c",
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
@@ -179,7 +179,7 @@
                 },
                 {
                     "name": "",
-                    "id": "r6s8pq9s-2t0p-4q3s-or5t-8p2s3q0u7t6p",
+                    "id": "f6a8de9a-2a0d-4e3a-cf5a-8d2a3e0f7a6d",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
@@ -190,7 +190,7 @@
                 },
                 {
                     "name": "",
-                    "id": "s7t9qr0t-3u1q-4r4t-ps6u-9q3t4r1v8u7q",
+                    "id": "a7b9ef0b-3b1e-4f4b-da6b-9e3b4f1a8b7e",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
@@ -237,7 +237,7 @@
                 {
                     "name": "",
                     "id": "f0a1b2c3-d4e5-4f6a-2b7c-8d9e0f1a2b3c",
-                    "path": "<Keyboard>/return",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -262,7 +262,6 @@
     "controlSchemes": [
         {
             "name": "Keyboard&Mouse",
-            "restrictToSuppliedDevices": false,
             "bindingGroup": "Keyboard&Mouse",
             "devices": [
                 {
@@ -279,7 +278,6 @@
         },
         {
             "name": "Gamepad",
-            "restrictToSuppliedDevices": false,
             "bindingGroup": "Gamepad",
             "devices": [
                 {

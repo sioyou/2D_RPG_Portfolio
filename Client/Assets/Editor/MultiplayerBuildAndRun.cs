@@ -7,6 +7,12 @@ using UnityEditor;
 
 public class MultiplayerBuildAndRun
 {
+    [MenuItem("Tools/Run MultiPlayer/1Player")]
+    static void PerformWin64Build1()
+    {
+        PerformWin64Build(1);
+    }
+
     [MenuItem("Tools/Run MultiPlayer/2Players")]
     static void PerformWin64Build2()
     {

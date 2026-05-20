@@ -16,6 +16,8 @@ public:
 	void FillEnterGameSpawns(Protocol::S_C_ENTER_GAME& pkt);
 	void Broadcast(SendBufferRef sendBuffer);
 
+	void ValidateClientPosition(PlayerRef player, float clientX, float clientY, float& outX, float& outY);
+
 	PlayerRef FindPlayer(int32 objectId);
 
 private:

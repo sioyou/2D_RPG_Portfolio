@@ -58,12 +58,13 @@ namespace Protocol {
 
 enum CreatureState : int {
   CREATURE_STATE_IDLE = 0,
+  CREATURE_STATE_MOVE = 1,
   CreatureState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   CreatureState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool CreatureState_IsValid(int value);
 constexpr CreatureState CreatureState_MIN = CREATURE_STATE_IDLE;
-constexpr CreatureState CreatureState_MAX = CREATURE_STATE_IDLE;
+constexpr CreatureState CreatureState_MAX = CREATURE_STATE_MOVE;
 constexpr int CreatureState_ARRAYSIZE = CreatureState_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CreatureState_descriptor();

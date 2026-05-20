@@ -181,6 +181,20 @@ public class NetworkManager
         }
     }
 
+    public void SendMoveSync(float posX, float posY, float dirX, float dirY)
+    {
+        if (GameServer.IsConnected() == false)
+            return;
+
+        Send(new C_S_MOVE
+        {
+            PosX = posX,
+            PosY = posY,
+            DirX = dirX,
+            DirY = dirY,
+        });
+    }
+
     public void SendLeaveGame()
     {
         if (GameServer.IsConnected() == false)

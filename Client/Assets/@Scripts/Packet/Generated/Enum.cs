@@ -24,11 +24,11 @@ namespace Protocol {
     static EnumReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgpFbnVtLnByb3RvEghQcm90b2NvbCooCg1DcmVhdHVyZVN0YXRlEhcKE0NS",
-            "RUFUVVJFX1NUQVRFX0lETEUQACpzCg5HYW1lT2JqZWN0VHlwZRIUChBPQkpF",
-            "Q1RfVFlQRV9OT05FEAASFgoST0JKRUNUX1RZUEVfUExBWUVSEAESGgoWT0JK",
-            "RUNUX1RZUEVfUFJPSkVDVElMRRACEhcKE09CSkVDVF9UWVBFX01PTlNURVIQ",
-            "A2IGcHJvdG8z"));
+            "CgpFbnVtLnByb3RvEghQcm90b2NvbCpBCg1DcmVhdHVyZVN0YXRlEhcKE0NS",
+            "RUFUVVJFX1NUQVRFX0lETEUQABIXChNDUkVBVFVSRV9TVEFURV9NT1ZFEAEq",
+            "cwoOR2FtZU9iamVjdFR5cGUSFAoQT0JKRUNUX1RZUEVfTk9ORRAAEhYKEk9C",
+            "SkVDVF9UWVBFX1BMQVlFUhABEhoKFk9CSkVDVF9UWVBFX1BST0pFQ1RJTEUQ",
+            "AhIXChNPQkpFQ1RfVFlQRV9NT05TVEVSEANiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.CreatureState), typeof(global::Protocol.GameObjectType), }, null, null));
@@ -39,6 +39,7 @@ namespace Protocol {
   #region Enums
   public enum CreatureState {
     [pbr::OriginalName("CREATURE_STATE_IDLE")] Idle = 0,
+    [pbr::OriginalName("CREATURE_STATE_MOVE")] Move = 1,
   }
 
   public enum GameObjectType {

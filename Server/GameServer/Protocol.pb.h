@@ -1305,6 +1305,48 @@ class C_S_MOVE final :
 
   // accessors -------------------------------------------------------
 
+  enum : int {
+    kPosXFieldNumber = 1,
+    kPosYFieldNumber = 2,
+    kDirXFieldNumber = 3,
+    kDirYFieldNumber = 4,
+  };
+  // float posX = 1;
+  void clear_posx();
+  float posx() const;
+  void set_posx(float value);
+  private:
+  float _internal_posx() const;
+  void _internal_set_posx(float value);
+  public:
+
+  // float posY = 2;
+  void clear_posy();
+  float posy() const;
+  void set_posy(float value);
+  private:
+  float _internal_posy() const;
+  void _internal_set_posy(float value);
+  public:
+
+  // float dirX = 3;
+  void clear_dirx();
+  float dirx() const;
+  void set_dirx(float value);
+  private:
+  float _internal_dirx() const;
+  void _internal_set_dirx(float value);
+  public:
+
+  // float dirY = 4;
+  void clear_diry();
+  float diry() const;
+  void set_diry(float value);
+  private:
+  float _internal_diry() const;
+  void _internal_set_diry(float value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.C_S_MOVE)
  private:
   class _Internal;
@@ -1312,6 +1354,10 @@ class C_S_MOVE final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  float posx_;
+  float posy_;
+  float dirx_;
+  float diry_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
@@ -1424,6 +1470,48 @@ class S_C_MOVE final :
 
   // accessors -------------------------------------------------------
 
+  enum : int {
+    kObjectIdFieldNumber = 1,
+    kPosXFieldNumber = 2,
+    kPosYFieldNumber = 3,
+    kStateFieldNumber = 4,
+  };
+  // int32 objectId = 1;
+  void clear_objectid();
+  ::PROTOBUF_NAMESPACE_ID::int32 objectid() const;
+  void set_objectid(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_objectid() const;
+  void _internal_set_objectid(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // float posX = 2;
+  void clear_posx();
+  float posx() const;
+  void set_posx(float value);
+  private:
+  float _internal_posx() const;
+  void _internal_set_posx(float value);
+  public:
+
+  // float posY = 3;
+  void clear_posy();
+  float posy() const;
+  void set_posy(float value);
+  private:
+  float _internal_posy() const;
+  void _internal_set_posy(float value);
+  public:
+
+  // .Protocol.CreatureState state = 4;
+  void clear_state();
+  ::Protocol::CreatureState state() const;
+  void set_state(::Protocol::CreatureState value);
+  private:
+  ::Protocol::CreatureState _internal_state() const;
+  void _internal_set_state(::Protocol::CreatureState value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.S_C_MOVE)
  private:
   class _Internal;
@@ -1431,6 +1519,10 @@ class S_C_MOVE final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::int32 objectid_;
+  float posx_;
+  float posy_;
+  int state_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
@@ -2401,9 +2493,169 @@ inline void S_C_DESPAWN::set_objectid(::PROTOBUF_NAMESPACE_ID::int32 value) {
 
 // C_S_MOVE
 
+// float posX = 1;
+inline void C_S_MOVE::clear_posx() {
+  posx_ = 0;
+}
+inline float C_S_MOVE::_internal_posx() const {
+  return posx_;
+}
+inline float C_S_MOVE::posx() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_S_MOVE.posX)
+  return _internal_posx();
+}
+inline void C_S_MOVE::_internal_set_posx(float value) {
+  
+  posx_ = value;
+}
+inline void C_S_MOVE::set_posx(float value) {
+  _internal_set_posx(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_S_MOVE.posX)
+}
+
+// float posY = 2;
+inline void C_S_MOVE::clear_posy() {
+  posy_ = 0;
+}
+inline float C_S_MOVE::_internal_posy() const {
+  return posy_;
+}
+inline float C_S_MOVE::posy() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_S_MOVE.posY)
+  return _internal_posy();
+}
+inline void C_S_MOVE::_internal_set_posy(float value) {
+  
+  posy_ = value;
+}
+inline void C_S_MOVE::set_posy(float value) {
+  _internal_set_posy(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_S_MOVE.posY)
+}
+
+// float dirX = 3;
+inline void C_S_MOVE::clear_dirx() {
+  dirx_ = 0;
+}
+inline float C_S_MOVE::_internal_dirx() const {
+  return dirx_;
+}
+inline float C_S_MOVE::dirx() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_S_MOVE.dirX)
+  return _internal_dirx();
+}
+inline void C_S_MOVE::_internal_set_dirx(float value) {
+  
+  dirx_ = value;
+}
+inline void C_S_MOVE::set_dirx(float value) {
+  _internal_set_dirx(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_S_MOVE.dirX)
+}
+
+// float dirY = 4;
+inline void C_S_MOVE::clear_diry() {
+  diry_ = 0;
+}
+inline float C_S_MOVE::_internal_diry() const {
+  return diry_;
+}
+inline float C_S_MOVE::diry() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_S_MOVE.dirY)
+  return _internal_diry();
+}
+inline void C_S_MOVE::_internal_set_diry(float value) {
+  
+  diry_ = value;
+}
+inline void C_S_MOVE::set_diry(float value) {
+  _internal_set_diry(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_S_MOVE.dirY)
+}
+
 // -------------------------------------------------------------------
 
 // S_C_MOVE
+
+// int32 objectId = 1;
+inline void S_C_MOVE::clear_objectid() {
+  objectid_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 S_C_MOVE::_internal_objectid() const {
+  return objectid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 S_C_MOVE::objectid() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_C_MOVE.objectId)
+  return _internal_objectid();
+}
+inline void S_C_MOVE::_internal_set_objectid(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  objectid_ = value;
+}
+inline void S_C_MOVE::set_objectid(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_objectid(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_C_MOVE.objectId)
+}
+
+// float posX = 2;
+inline void S_C_MOVE::clear_posx() {
+  posx_ = 0;
+}
+inline float S_C_MOVE::_internal_posx() const {
+  return posx_;
+}
+inline float S_C_MOVE::posx() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_C_MOVE.posX)
+  return _internal_posx();
+}
+inline void S_C_MOVE::_internal_set_posx(float value) {
+  
+  posx_ = value;
+}
+inline void S_C_MOVE::set_posx(float value) {
+  _internal_set_posx(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_C_MOVE.posX)
+}
+
+// float posY = 3;
+inline void S_C_MOVE::clear_posy() {
+  posy_ = 0;
+}
+inline float S_C_MOVE::_internal_posy() const {
+  return posy_;
+}
+inline float S_C_MOVE::posy() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_C_MOVE.posY)
+  return _internal_posy();
+}
+inline void S_C_MOVE::_internal_set_posy(float value) {
+  
+  posy_ = value;
+}
+inline void S_C_MOVE::set_posy(float value) {
+  _internal_set_posy(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_C_MOVE.posY)
+}
+
+// .Protocol.CreatureState state = 4;
+inline void S_C_MOVE::clear_state() {
+  state_ = 0;
+}
+inline ::Protocol::CreatureState S_C_MOVE::_internal_state() const {
+  return static_cast< ::Protocol::CreatureState >(state_);
+}
+inline ::Protocol::CreatureState S_C_MOVE::state() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_C_MOVE.state)
+  return _internal_state();
+}
+inline void S_C_MOVE::_internal_set_state(::Protocol::CreatureState value) {
+  
+  state_ = value;
+}
+inline void S_C_MOVE::set_state(::Protocol::CreatureState value) {
+  _internal_set_state(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_C_MOVE.state)
+}
 
 // -------------------------------------------------------------------
 

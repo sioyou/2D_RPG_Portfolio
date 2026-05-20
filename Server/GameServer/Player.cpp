@@ -27,3 +27,18 @@ bool Player::IsOnline() const
 {
 	return _session.lock() != nullptr;
 }
+
+void Player::SetMoveDirection(float dirX, float dirY)
+{
+	const float lengthSq = dirX * dirX + dirY * dirY;
+	if (lengthSq < 0.0001f)
+	{
+		_moveDirX = 0.f;
+		_moveDirY = 0.f;
+		return;
+	}
+
+	const float invLength = 1.f / sqrtf(lengthSq);
+	_moveDirX = dirX * invLength;
+	_moveDirY = dirY * invLength;
+}

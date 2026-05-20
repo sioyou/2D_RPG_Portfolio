@@ -37,39 +37,6 @@ public class Managers : MonoBehaviour
 
     #endregion
 
-    #region Language
-    private static Define.ELanguage _language = Define.ELanguage.Korean;
-    public static Define.ELanguage Language
-    {
-        get { return _language; }
-        set
-        {
-            _language = value;
-        }
-    }
-
-    public static string GetText(string textId)
-    {
-        switch (_language)
-        {
-            case Define.ELanguage.Korean:
-                break;
-            case Define.ELanguage.English:
-                break;
-            case Define.ELanguage.French:
-                break;
-            case Define.ELanguage.SimplifiedChinese:
-                break;
-            case Define.ELanguage.TraditionalChinese:
-                break;
-            case Define.ELanguage.Japanese:
-                break;
-        }
-
-        return "";
-    }
-    #endregion
-
     public static void Init()
     {
         if (s_instance == null && Initialized == false)

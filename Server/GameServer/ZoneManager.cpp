@@ -46,6 +46,7 @@ bool ZoneManager::EnterGame(PlayerRef player, Protocol::S_C_ENTER_GAME& outPkt)
 		return false;
 
 	player->SetState(EPlayerState::InGame);
+	player->SetLastMoveTick(0);
 
 	outPkt.set_success(true);
 	outPkt.set_myobjectid(player->GetObjectId());
@@ -68,6 +69,8 @@ void ZoneManager::LeaveGame(PlayerRef player)
 	if (player->GetState() == EPlayerState::InGame)
 		BroadcastDespawn(zone, player->GetObjectId());
 
+	player->SetMoveDirection(0.f, 0.f);
+	player->SetLastMoveTick(0);
 	zone->LeavePlayer(player);
 	player->SetState(EPlayerState::Lobby);
 }
