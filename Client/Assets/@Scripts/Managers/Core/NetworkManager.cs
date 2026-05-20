@@ -181,7 +181,7 @@ public class NetworkManager
         }
     }
 
-    public void SendMoveSync(float posX, float posY, float dirX, float dirY)
+    public void SendMoveSync(float posX, float posY, float dirX, float dirY, int stateFlags)
     {
         if (GameServer.IsConnected() == false)
             return;
@@ -192,6 +192,7 @@ public class NetworkManager
             PosY = posY,
             DirX = dirX,
             DirY = dirY,
+            StateFlags = stateFlags,
         });
     }
 

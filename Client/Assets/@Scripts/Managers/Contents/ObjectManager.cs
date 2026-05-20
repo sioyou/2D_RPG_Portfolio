@@ -77,7 +77,7 @@ public class ObjectManager
             return;
 
         if (Managers.Game.MyPlayerObject != null && go == Managers.Game.MyPlayerObject.gameObject)
-            Managers.Game.ClearMyHero();
+            Managers.Game.ClearMyPlayer();
 
         _objects.Remove(objectId);
         Managers.Resource.Destroy(go);

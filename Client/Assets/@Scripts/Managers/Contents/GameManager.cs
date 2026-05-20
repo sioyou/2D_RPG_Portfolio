@@ -14,20 +14,20 @@ public class GameManager
     public void SetMyObjectId(int objectId)
     {
         MyObjectId = objectId;
-        TryBindExistingMyHero();
+        TryBindExistingMyPlayer();
     }
 
-    public void BindMyHero(MyPlayerObject myPlayerObject)
+    public void BindMyPlayer(MyPlayerObject myPlayerObject)
     {
         MyPlayerObject = myPlayerObject;
     }
 
-    public void ClearMyHero()
+    public void ClearMyPlayer()
     {
         MyPlayerObject = null;
     }
 
-    public void TryBindExistingMyHero()
+    public void TryBindExistingMyPlayer()
     {
         if (MyObjectId <= 0)
             return;

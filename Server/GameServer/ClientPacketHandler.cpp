@@ -3,6 +3,7 @@
 #include "GameSession.h"
 #include "PlayerManager.h"
 #include "ZoneManager.h"
+#include "CreatureStateUtil.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
@@ -87,13 +88,15 @@ bool Handle_C_S_MOVE(PacketSessionRef& session, Protocol::C_S_MOVE& pkt)
 	player->GetStat().SetPosition(validatedX, validatedY);
 	player->SetMoveDirection(pkt.dirx(), pkt.diry());
 
+	const int32 stateFlags = CreatureStateUtil::SanitizeStateFlags(
+		pkt.stateflags(), player->GetMoveDirX(), player->GetMoveDirY());
+	player->SetStateFlags(stateFlags);
+
 	Protocol::S_C_MOVE movePkt;
 	movePkt.set_objectid(player->GetObjectId());
 	movePkt.set_posx(validatedX);
 	movePkt.set_posy(validatedY);
-
-	const bool isMoving = (player->GetMoveDirX() != 0.f || player->GetMoveDirY() != 0.f);
-	movePkt.set_state(isMoving ? Protocol::CREATURE_STATE_MOVE : Protocol::CREATURE_STATE_IDLE);
+	movePkt.set_stateflags(stateFlags);
 
 	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(movePkt);
 	zone->Broadcast(sendBuffer);

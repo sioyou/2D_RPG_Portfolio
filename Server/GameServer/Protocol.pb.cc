@@ -118,7 +118,8 @@ constexpr C_S_MOVE::C_S_MOVE(
   : posx_(0)
   , posy_(0)
   , dirx_(0)
-  , diry_(0){}
+  , diry_(0)
+  , stateflags_(0){}
 struct C_S_MOVEDefaultTypeInternal {
   constexpr C_S_MOVEDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -133,8 +134,7 @@ constexpr S_C_MOVE::S_C_MOVE(
   : objectid_(0)
   , posx_(0)
   , posy_(0)
-  , state_(0)
-{}
+  , stateflags_(0){}
 struct S_C_MOVEDefaultTypeInternal {
   constexpr S_C_MOVEDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -267,6 +267,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::C_S_MOVE, posy_),
   PROTOBUF_FIELD_OFFSET(::Protocol::C_S_MOVE, dirx_),
   PROTOBUF_FIELD_OFFSET(::Protocol::C_S_MOVE, diry_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_S_MOVE, stateflags_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -275,7 +276,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, objectid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, posx_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, posy_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, state_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_C_MOVE, stateflags_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_S_ATTACK, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -317,12 +318,12 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 36, -1, sizeof(::Protocol::S_C_SPAWN)},
   { 42, -1, sizeof(::Protocol::S_C_DESPAWN)},
   { 48, -1, sizeof(::Protocol::C_S_MOVE)},
-  { 57, -1, sizeof(::Protocol::S_C_MOVE)},
-  { 66, -1, sizeof(::Protocol::C_S_ATTACK)},
-  { 71, -1, sizeof(::Protocol::S_C_ATTACK)},
-  { 76, -1, sizeof(::Protocol::S_C_DIE)},
-  { 81, -1, sizeof(::Protocol::C_S_CHAT)},
-  { 88, -1, sizeof(::Protocol::S_C_CHAT)},
+  { 58, -1, sizeof(::Protocol::S_C_MOVE)},
+  { 67, -1, sizeof(::Protocol::C_S_ATTACK)},
+  { 72, -1, sizeof(::Protocol::S_C_ATTACK)},
+  { 77, -1, sizeof(::Protocol::S_C_DIE)},
+  { 82, -1, sizeof(::Protocol::C_S_CHAT)},
+  { 89, -1, sizeof(::Protocol::S_C_CHAT)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -353,11 +354,11 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "ME\"!\n\016S_C_LEAVE_GAME\022\017\n\007success\030\001 \001(\010\"/\n"
   "\tS_C_SPAWN\022\"\n\004info\030\001 \001(\0132\024.Protocol.Obje"
   "ctInfo\"\037\n\013S_C_DESPAWN\022\020\n\010objectId\030\001 \001(\005\""
-  "B\n\010C_S_MOVE\022\014\n\004posX\030\001 \001(\002\022\014\n\004posY\030\002 \001(\002\022"
-  "\014\n\004dirX\030\003 \001(\002\022\014\n\004dirY\030\004 \001(\002\"`\n\010S_C_MOVE\022"
-  "\020\n\010objectId\030\001 \001(\005\022\014\n\004posX\030\002 \001(\002\022\014\n\004posY\030"
-  "\003 \001(\002\022&\n\005state\030\004 \001(\0162\027.Protocol.Creature"
-  "State\"\014\n\nC_S_ATTACK\"\014\n\nS_C_ATTACK\"\t\n\007S_C"
+  "V\n\010C_S_MOVE\022\014\n\004posX\030\001 \001(\002\022\014\n\004posY\030\002 \001(\002\022"
+  "\014\n\004dirX\030\003 \001(\002\022\014\n\004dirY\030\004 \001(\002\022\022\n\nstateFlag"
+  "s\030\005 \001(\005\"L\n\010S_C_MOVE\022\020\n\010objectId\030\001 \001(\005\022\014\n"
+  "\004posX\030\002 \001(\002\022\014\n\004posY\030\003 \001(\002\022\022\n\nstateFlags\030"
+  "\004 \001(\005\"\014\n\nC_S_ATTACK\"\014\n\nS_C_ATTACK\"\t\n\007S_C"
   "_DIE\")\n\010C_S_CHAT\022\013\n\003msg\030\001 \001(\t\022\020\n\010chatTyp"
   "e\030\002 \001(\005\";\n\010S_C_CHAT\022\020\n\010objectId\030\001 \001(\005\022\013\n"
   "\003msg\030\002 \001(\t\022\020\n\010chatType\030\003 \001(\005b\006proto3"
@@ -1953,16 +1954,16 @@ C_S_MOVE::C_S_MOVE(const C_S_MOVE& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&posx_, &from.posx_,
-    static_cast<size_t>(reinterpret_cast<char*>(&diry_) -
-    reinterpret_cast<char*>(&posx_)) + sizeof(diry_));
+    static_cast<size_t>(reinterpret_cast<char*>(&stateflags_) -
+    reinterpret_cast<char*>(&posx_)) + sizeof(stateflags_));
   // @@protoc_insertion_point(copy_constructor:Protocol.C_S_MOVE)
 }
 
 void C_S_MOVE::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&posx_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&diry_) -
-    reinterpret_cast<char*>(&posx_)) + sizeof(diry_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&stateflags_) -
+    reinterpret_cast<char*>(&posx_)) + sizeof(stateflags_));
 }
 
 C_S_MOVE::~C_S_MOVE() {
@@ -1992,8 +1993,8 @@ void C_S_MOVE::Clear() {
   (void) cached_has_bits;
 
   ::memset(&posx_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&diry_) -
-      reinterpret_cast<char*>(&posx_)) + sizeof(diry_));
+      reinterpret_cast<char*>(&stateflags_) -
+      reinterpret_cast<char*>(&posx_)) + sizeof(stateflags_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2029,6 +2030,13 @@ const char* C_S_MOVE::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 37)) {
           diry_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
+        } else goto handle_unusual;
+        continue;
+      // int32 stateFlags = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          stateflags_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else goto handle_unusual;
         continue;
       default: {
@@ -2084,6 +2092,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(4, this->_internal_diry(), target);
   }
 
+  // int32 stateFlags = 5;
+  if (this->stateflags() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_stateflags(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2118,6 +2132,13 @@ size_t C_S_MOVE::ByteSizeLong() const {
   // float dirY = 4;
   if (!(this->diry() <= 0 && this->diry() >= 0)) {
     total_size += 1 + 4;
+  }
+
+  // int32 stateFlags = 5;
+  if (this->stateflags() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_stateflags());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2163,6 +2184,9 @@ void C_S_MOVE::MergeFrom(const C_S_MOVE& from) {
   if (!(from.diry() <= 0 && from.diry() >= 0)) {
     _internal_set_diry(from._internal_diry());
   }
+  if (from.stateflags() != 0) {
+    _internal_set_stateflags(from._internal_stateflags());
+  }
 }
 
 void C_S_MOVE::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -2187,8 +2211,8 @@ void C_S_MOVE::InternalSwap(C_S_MOVE* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(C_S_MOVE, diry_)
-      + sizeof(C_S_MOVE::diry_)
+      PROTOBUF_FIELD_OFFSET(C_S_MOVE, stateflags_)
+      + sizeof(C_S_MOVE::stateflags_)
       - PROTOBUF_FIELD_OFFSET(C_S_MOVE, posx_)>(
           reinterpret_cast<char*>(&posx_),
           reinterpret_cast<char*>(&other->posx_));
@@ -2216,16 +2240,16 @@ S_C_MOVE::S_C_MOVE(const S_C_MOVE& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&objectid_, &from.objectid_,
-    static_cast<size_t>(reinterpret_cast<char*>(&state_) -
-    reinterpret_cast<char*>(&objectid_)) + sizeof(state_));
+    static_cast<size_t>(reinterpret_cast<char*>(&stateflags_) -
+    reinterpret_cast<char*>(&objectid_)) + sizeof(stateflags_));
   // @@protoc_insertion_point(copy_constructor:Protocol.S_C_MOVE)
 }
 
 void S_C_MOVE::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&objectid_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&state_) -
-    reinterpret_cast<char*>(&objectid_)) + sizeof(state_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&stateflags_) -
+    reinterpret_cast<char*>(&objectid_)) + sizeof(stateflags_));
 }
 
 S_C_MOVE::~S_C_MOVE() {
@@ -2255,8 +2279,8 @@ void S_C_MOVE::Clear() {
   (void) cached_has_bits;
 
   ::memset(&objectid_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&state_) -
-      reinterpret_cast<char*>(&objectid_)) + sizeof(state_));
+      reinterpret_cast<char*>(&stateflags_) -
+      reinterpret_cast<char*>(&objectid_)) + sizeof(stateflags_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2287,12 +2311,11 @@ const char* S_C_MOVE::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           ptr += sizeof(float);
         } else goto handle_unusual;
         continue;
-      // .Protocol.CreatureState state = 4;
+      // int32 stateFlags = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
-          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          stateflags_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-          _internal_set_state(static_cast<::Protocol::CreatureState>(val));
         } else goto handle_unusual;
         continue;
       default: {
@@ -2342,11 +2365,10 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(3, this->_internal_posy(), target);
   }
 
-  // .Protocol.CreatureState state = 4;
-  if (this->state() != 0) {
+  // int32 stateFlags = 4;
+  if (this->stateflags() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
-      4, this->_internal_state(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_stateflags(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2382,10 +2404,11 @@ size_t S_C_MOVE::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // .Protocol.CreatureState state = 4;
-  if (this->state() != 0) {
+  // int32 stateFlags = 4;
+  if (this->stateflags() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_state());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_stateflags());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2428,8 +2451,8 @@ void S_C_MOVE::MergeFrom(const S_C_MOVE& from) {
   if (!(from.posy() <= 0 && from.posy() >= 0)) {
     _internal_set_posy(from._internal_posy());
   }
-  if (from.state() != 0) {
-    _internal_set_state(from._internal_state());
+  if (from.stateflags() != 0) {
+    _internal_set_stateflags(from._internal_stateflags());
   }
 }
 
@@ -2455,8 +2478,8 @@ void S_C_MOVE::InternalSwap(S_C_MOVE* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(S_C_MOVE, state_)
-      + sizeof(S_C_MOVE::state_)
+      PROTOBUF_FIELD_OFFSET(S_C_MOVE, stateflags_)
+      + sizeof(S_C_MOVE::stateflags_)
       - PROTOBUF_FIELD_OFFSET(S_C_MOVE, objectid_)>(
           reinterpret_cast<char*>(&objectid_),
           reinterpret_cast<char*>(&other->objectid_));

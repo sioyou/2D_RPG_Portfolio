@@ -209,6 +209,7 @@
     <ClInclude Include="GameSessionManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="CreatureStat.h" />
+    <ClInclude Include="CreatureStateUtil.h" />
     <ClInclude Include="MonsterManager.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="pch.h" />

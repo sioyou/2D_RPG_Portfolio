@@ -24,11 +24,12 @@ namespace Protocol {
     static EnumReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgpFbnVtLnByb3RvEghQcm90b2NvbCpBCg1DcmVhdHVyZVN0YXRlEhcKE0NS",
-            "RUFUVVJFX1NUQVRFX0lETEUQABIXChNDUkVBVFVSRV9TVEFURV9NT1ZFEAEq",
-            "cwoOR2FtZU9iamVjdFR5cGUSFAoQT0JKRUNUX1RZUEVfTk9ORRAAEhYKEk9C",
-            "SkVDVF9UWVBFX1BMQVlFUhABEhoKFk9CSkVDVF9UWVBFX1BST0pFQ1RJTEUQ",
-            "AhIXChNPQkpFQ1RfVFlQRV9NT05TVEVSEANiBnByb3RvMw=="));
+            "CgpFbnVtLnByb3RvEghQcm90b2NvbCp2Cg1DcmVhdHVyZVN0YXRlEhcKE0NS",
+            "RUFUVVJFX1NUQVRFX05PTkUQABIXChNDUkVBVFVSRV9TVEFURV9NT1ZFEAES",
+            "GQoVQ1JFQVRVUkVfU1RBVEVfQVRUQUNLEAISGAoUQ1JFQVRVUkVfU1RBVEVf",
+            "U0tJTEwQAypzCg5HYW1lT2JqZWN0VHlwZRIUChBPQkpFQ1RfVFlQRV9OT05F",
+            "EAASFgoST0JKRUNUX1RZUEVfUExBWUVSEAESGgoWT0JKRUNUX1RZUEVfUFJP",
+            "SkVDVElMRRACEhcKE09CSkVDVF9UWVBFX01PTlNURVIQA2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.CreatureState), typeof(global::Protocol.GameObjectType), }, null, null));
@@ -38,8 +39,10 @@ namespace Protocol {
   }
   #region Enums
   public enum CreatureState {
-    [pbr::OriginalName("CREATURE_STATE_IDLE")] Idle = 0,
+    [pbr::OriginalName("CREATURE_STATE_NONE")] None = 0,
     [pbr::OriginalName("CREATURE_STATE_MOVE")] Move = 1,
+    [pbr::OriginalName("CREATURE_STATE_ATTACK")] Attack = 2,
+    [pbr::OriginalName("CREATURE_STATE_SKILL")] Skill = 3,
   }
 
   public enum GameObjectType {

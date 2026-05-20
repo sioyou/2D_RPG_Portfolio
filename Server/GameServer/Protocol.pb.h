@@ -1310,6 +1310,7 @@ class C_S_MOVE final :
     kPosYFieldNumber = 2,
     kDirXFieldNumber = 3,
     kDirYFieldNumber = 4,
+    kStateFlagsFieldNumber = 5,
   };
   // float posX = 1;
   void clear_posx();
@@ -1347,6 +1348,15 @@ class C_S_MOVE final :
   void _internal_set_diry(float value);
   public:
 
+  // int32 stateFlags = 5;
+  void clear_stateflags();
+  ::PROTOBUF_NAMESPACE_ID::int32 stateflags() const;
+  void set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_stateflags() const;
+  void _internal_set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.C_S_MOVE)
  private:
   class _Internal;
@@ -1358,6 +1368,7 @@ class C_S_MOVE final :
   float posy_;
   float dirx_;
   float diry_;
+  ::PROTOBUF_NAMESPACE_ID::int32 stateflags_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
@@ -1474,7 +1485,7 @@ class S_C_MOVE final :
     kObjectIdFieldNumber = 1,
     kPosXFieldNumber = 2,
     kPosYFieldNumber = 3,
-    kStateFieldNumber = 4,
+    kStateFlagsFieldNumber = 4,
   };
   // int32 objectId = 1;
   void clear_objectid();
@@ -1503,13 +1514,13 @@ class S_C_MOVE final :
   void _internal_set_posy(float value);
   public:
 
-  // .Protocol.CreatureState state = 4;
-  void clear_state();
-  ::Protocol::CreatureState state() const;
-  void set_state(::Protocol::CreatureState value);
+  // int32 stateFlags = 4;
+  void clear_stateflags();
+  ::PROTOBUF_NAMESPACE_ID::int32 stateflags() const;
+  void set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value);
   private:
-  ::Protocol::CreatureState _internal_state() const;
-  void _internal_set_state(::Protocol::CreatureState value);
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_stateflags() const;
+  void _internal_set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.S_C_MOVE)
@@ -1522,7 +1533,7 @@ class S_C_MOVE final :
   ::PROTOBUF_NAMESPACE_ID::int32 objectid_;
   float posx_;
   float posy_;
-  int state_;
+  ::PROTOBUF_NAMESPACE_ID::int32 stateflags_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Protocol_2eproto;
 };
@@ -2573,6 +2584,26 @@ inline void C_S_MOVE::set_diry(float value) {
   // @@protoc_insertion_point(field_set:Protocol.C_S_MOVE.dirY)
 }
 
+// int32 stateFlags = 5;
+inline void C_S_MOVE::clear_stateflags() {
+  stateflags_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 C_S_MOVE::_internal_stateflags() const {
+  return stateflags_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 C_S_MOVE::stateflags() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_S_MOVE.stateFlags)
+  return _internal_stateflags();
+}
+inline void C_S_MOVE::_internal_set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  stateflags_ = value;
+}
+inline void C_S_MOVE::set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_stateflags(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_S_MOVE.stateFlags)
+}
+
 // -------------------------------------------------------------------
 
 // S_C_MOVE
@@ -2637,24 +2668,24 @@ inline void S_C_MOVE::set_posy(float value) {
   // @@protoc_insertion_point(field_set:Protocol.S_C_MOVE.posY)
 }
 
-// .Protocol.CreatureState state = 4;
-inline void S_C_MOVE::clear_state() {
-  state_ = 0;
+// int32 stateFlags = 4;
+inline void S_C_MOVE::clear_stateflags() {
+  stateflags_ = 0;
 }
-inline ::Protocol::CreatureState S_C_MOVE::_internal_state() const {
-  return static_cast< ::Protocol::CreatureState >(state_);
+inline ::PROTOBUF_NAMESPACE_ID::int32 S_C_MOVE::_internal_stateflags() const {
+  return stateflags_;
 }
-inline ::Protocol::CreatureState S_C_MOVE::state() const {
-  // @@protoc_insertion_point(field_get:Protocol.S_C_MOVE.state)
-  return _internal_state();
+inline ::PROTOBUF_NAMESPACE_ID::int32 S_C_MOVE::stateflags() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_C_MOVE.stateFlags)
+  return _internal_stateflags();
 }
-inline void S_C_MOVE::_internal_set_state(::Protocol::CreatureState value) {
+inline void S_C_MOVE::_internal_set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
-  state_ = value;
+  stateflags_ = value;
 }
-inline void S_C_MOVE::set_state(::Protocol::CreatureState value) {
-  _internal_set_state(value);
-  // @@protoc_insertion_point(field_set:Protocol.S_C_MOVE.state)
+inline void S_C_MOVE::set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_stateflags(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_C_MOVE.stateFlags)
 }
 
 // -------------------------------------------------------------------

@@ -1,7 +1,6 @@
 ﻿using Protocol;
 using UnityEngine;
 
-[DefaultExecutionOrder(100)]
 public class MyPlayerObject : PlayerObject
 {
     const float MoveDeadzoneSqr = 0.02f * 0.02f;
@@ -13,10 +12,17 @@ public class MyPlayerObject : PlayerObject
     Vector2 _moveDir;
     float _syncTimer;
 
+    int _lastSentStateFlags = -1;
+    float _lastSentPosX;
+    float _lastSentPosY;
+    float _lastSentDirX;
+    float _lastSentDirY;
+
     protected override void OnInfoSet(ObjectInfo info)
     {
         base.OnInfoSet(info);
-        Managers.Game.BindMyHero(this);
+        Managers.Game.BindMyPlayer(this);
+        State?.ClearActionFlags();
     }
 
     protected override void Start()
@@ -24,6 +30,7 @@ public class MyPlayerObject : PlayerObject
         base.Start();
         BindCamera();
         _input = gameObject.GetOrAddComponent<InputComponent>();
+        BindMoveEvents();
     }
 
     void BindCamera()
@@ -39,16 +46,61 @@ public class MyPlayerObject : PlayerObject
         cc.Target = this;
     }
 
+    void BindMoveEvents()
+    {
+        if (Move == null)
+            return;
+
+        Move.ArrivedAtDestination -= OnMoveArrivedAtDestination;
+        Move.ArrivedAtDestination += OnMoveArrivedAtDestination;
+    }
+
+    void OnDestroy()
+    {
+        if (Move != null)
+            Move.ArrivedAtDestination -= OnMoveArrivedAtDestination;
+    }
+
     protected override void Update()
     {
         UpdateInput();
-        UpdateLocalMove();
+        UpdateState();
+    }
+
+    void UpdateState()
+    {
+        if (State != null && State.HasState(CreatureState.Move))
+            UpdateMove();
+
+        if (State != null && State.HasState(CreatureState.Attack))
+            UpdateAttack();
+
+        if (State != null && State.HasState(CreatureState.Skill))
+            UpdateSkill();
+
         UpdateSendMovePacket();
     }
 
-    void LateUpdate()
+    void UpdateMove()
     {
-        EndCorrectionIfArrived();
+        AddWorldDelta(_moveDir * (MoveSpeed * Time.deltaTime));
+    }
+
+    void UpdateAttack()
+    {
+    }
+
+    void UpdateSkill()
+    {
+    }
+
+    void OnMoveArrivedAtDestination()
+    {
+        if (Interpolate == false)
+            return;
+
+        Interpolate = false;
+        SyncDestinationToCurrent();
     }
 
     void UpdateInput()
@@ -64,27 +116,18 @@ public class MyPlayerObject : PlayerObject
             dir = Vector2.zero;
 
         _moveDir = dir;
+        UpdateMoveStateFromInput(dir.sqrMagnitude > 0.0001f);
     }
 
-    void UpdateLocalMove()
+    void UpdateMoveStateFromInput(bool isMoving)
     {
-        if (_moveDir.sqrMagnitude <= 0.0001f)
+        if (State == null)
             return;
 
-        AddWorldDelta(_moveDir * (MoveSpeed * Time.deltaTime));
-    }
-
-    void EndCorrectionIfArrived()
-    {
-        if (Interpolate == false)
-            return;
-
-        float arriveSqr = Move != null ? Move.ArriveSqrThreshold : 0.0004f;
-        if (SqrDistanceToDestination > arriveSqr)
-            return;
-
-        Interpolate = false;
-        SyncDestinationToCurrent();
+        if (isMoving)
+            State.AddState(CreatureState.Move);
+        else
+            State.RemoveState(CreatureState.Move);
     }
 
     public override void ApplyDestPosition(Vector2 pos)
@@ -97,15 +140,49 @@ public class MyPlayerObject : PlayerObject
         SetDestination(pos.x, pos.y);
     }
 
+    public override void ApplyStateFlags(int stateFlags)
+    {
+        // 내 캐릭 상태는 로컬 입력·스킬에서 결정.
+    }
+
     void UpdateSendMovePacket()
     {
+        if (State == null)
+            return;
+
+        int stateFlags = State.StateFlags;
+        if (stateFlags == (int)CreatureState.None && _lastSentStateFlags == (int)CreatureState.None)
+            return;
+
+        Vector3 pos = transform.position;
+
+        bool stateChanged = stateFlags != _lastSentStateFlags;
+        bool dirChanged =
+            Mathf.Approximately(_moveDir.x, _lastSentDirX) == false ||
+            Mathf.Approximately(_moveDir.y, _lastSentDirY) == false;
+        bool posChanged =
+            Mathf.Approximately(pos.x, _lastSentPosX) == false ||
+            Mathf.Approximately(pos.y, _lastSentPosY) == false;
+
+        if (stateChanged == false && dirChanged == false && posChanged == false)
+            return;
+
         _syncTimer += Time.deltaTime;
-        if (_syncTimer < _syncInterval)
+        if (stateChanged == false && _syncTimer < _syncInterval)
             return;
 
         _syncTimer = 0f;
+        SendMoveSync(pos.x, pos.y, _moveDir.x, _moveDir.y, stateFlags);
+    }
 
-        Vector3 pos = transform.position;
-        Managers.Network.SendMoveSync(pos.x, pos.y, _moveDir.x, _moveDir.y);
+    void SendMoveSync(float posX, float posY, float dirX, float dirY, int stateFlags)
+    {
+        Managers.Network.SendMoveSync(posX, posY, dirX, dirY, stateFlags);
+
+        _lastSentStateFlags = stateFlags;
+        _lastSentPosX = posX;
+        _lastSentPosY = posY;
+        _lastSentDirX = dirX;
+        _lastSentDirY = dirY;
     }
 }

@@ -68,6 +68,7 @@ public static class PacketHandler
             return;
 
         creature.ApplyDestPosition(new Vector2(pkt.PosX, pkt.PosY));
+        creature.ApplyStateFlags(pkt.StateFlags);
     }
 
     public static void S_C_ATTACKHandler(PacketSession session, IMessage packet)

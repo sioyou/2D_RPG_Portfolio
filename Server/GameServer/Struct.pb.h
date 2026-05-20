@@ -182,7 +182,7 @@ class ObjectInfo final :
     kMaxHpFieldNumber = 6,
     kPosXFieldNumber = 7,
     kPosYFieldNumber = 8,
-    kStateFieldNumber = 9,
+    kStateFlagsFieldNumber = 9,
   };
   // string name = 3;
   void clear_name();
@@ -261,13 +261,13 @@ class ObjectInfo final :
   void _internal_set_posy(float value);
   public:
 
-  // .Protocol.CreatureState state = 9;
-  void clear_state();
-  ::Protocol::CreatureState state() const;
-  void set_state(::Protocol::CreatureState value);
+  // int32 stateFlags = 9;
+  void clear_stateflags();
+  ::PROTOBUF_NAMESPACE_ID::int32 stateflags() const;
+  void set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value);
   private:
-  ::Protocol::CreatureState _internal_state() const;
-  void _internal_set_state(::Protocol::CreatureState value);
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_stateflags() const;
+  void _internal_set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.ObjectInfo)
@@ -285,7 +285,7 @@ class ObjectInfo final :
   ::PROTOBUF_NAMESPACE_ID::int32 maxhp_;
   float posx_;
   float posy_;
-  int state_;
+  ::PROTOBUF_NAMESPACE_ID::int32 stateflags_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Struct_2eproto;
 };
@@ -485,24 +485,24 @@ inline void ObjectInfo::set_posy(float value) {
   // @@protoc_insertion_point(field_set:Protocol.ObjectInfo.posY)
 }
 
-// .Protocol.CreatureState state = 9;
-inline void ObjectInfo::clear_state() {
-  state_ = 0;
+// int32 stateFlags = 9;
+inline void ObjectInfo::clear_stateflags() {
+  stateflags_ = 0;
 }
-inline ::Protocol::CreatureState ObjectInfo::_internal_state() const {
-  return static_cast< ::Protocol::CreatureState >(state_);
+inline ::PROTOBUF_NAMESPACE_ID::int32 ObjectInfo::_internal_stateflags() const {
+  return stateflags_;
 }
-inline ::Protocol::CreatureState ObjectInfo::state() const {
-  // @@protoc_insertion_point(field_get:Protocol.ObjectInfo.state)
-  return _internal_state();
+inline ::PROTOBUF_NAMESPACE_ID::int32 ObjectInfo::stateflags() const {
+  // @@protoc_insertion_point(field_get:Protocol.ObjectInfo.stateFlags)
+  return _internal_stateflags();
 }
-inline void ObjectInfo::_internal_set_state(::Protocol::CreatureState value) {
+inline void ObjectInfo::_internal_set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
-  state_ = value;
+  stateflags_ = value;
 }
-inline void ObjectInfo::set_state(::Protocol::CreatureState value) {
-  _internal_set_state(value);
-  // @@protoc_insertion_point(field_set:Protocol.ObjectInfo.state)
+inline void ObjectInfo::set_stateflags(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_stateflags(value);
+  // @@protoc_insertion_point(field_set:Protocol.ObjectInfo.stateFlags)
 }
 
 #ifdef __GNUC__

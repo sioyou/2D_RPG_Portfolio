@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "CreatureStat.h"
+#include "Enum.pb.h"
 
 enum class EPlayerState : uint8
 {
@@ -35,6 +36,9 @@ public:
 	float GetMoveDirX() const { return _moveDirX; }
 	float GetMoveDirY() const { return _moveDirY; }
 
+	int32 GetStateFlags() const { return _stateFlags; }
+	void SetStateFlags(int32 stateFlags) { _stateFlags = stateFlags; }
+
 	uint64 GetLastMoveTick() const { return _lastMoveTick; }
 	void SetLastMoveTick(uint64 tick) { _lastMoveTick = tick; }
 
@@ -48,6 +52,7 @@ private:
 
 	float _moveDirX = 0.f;
 	float _moveDirY = 0.f;
+	int32 _stateFlags = Protocol::CREATURE_STATE_NONE;
 
 	uint64 _lastMoveTick = 0;
 	uint64 _loginTick = 0;

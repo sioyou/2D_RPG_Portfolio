@@ -24,16 +24,16 @@ namespace Protocol {
     static StructReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgxTdHJ1Y3QucHJvdG8SCFByb3RvY29sGgpFbnVtLnByb3RvIsgBCgpPYmpl",
+            "CgxTdHJ1Y3QucHJvdG8SCFByb3RvY29sGgpFbnVtLnByb3RvIrQBCgpPYmpl",
             "Y3RJbmZvEhAKCG9iamVjdElkGAEgASgFEiwKCm9iamVjdFR5cGUYAiABKA4y",
             "GC5Qcm90b2NvbC5HYW1lT2JqZWN0VHlwZRIMCgRuYW1lGAMgASgJEg0KBWxl",
             "dmVsGAQgASgFEgoKAmhwGAUgASgFEg0KBW1heEhwGAYgASgFEgwKBHBvc1gY",
-            "ByABKAISDAoEcG9zWRgIIAEoAhImCgVzdGF0ZRgJIAEoDjIXLlByb3RvY29s",
-            "LkNyZWF0dXJlU3RhdGViBnByb3RvMw=="));
+            "ByABKAISDAoEcG9zWRgIIAEoAhISCgpzdGF0ZUZsYWdzGAkgASgFYgZwcm90",
+            "bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protocol.EnumReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.ObjectInfo), global::Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "ObjectType", "Name", "Level", "Hp", "MaxHp", "PosX", "PosY", "State" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.ObjectInfo), global::Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "ObjectType", "Name", "Level", "Hp", "MaxHp", "PosX", "PosY", "StateFlags" }, null, null, null, null)
           }));
     }
     #endregion
@@ -77,7 +77,7 @@ namespace Protocol {
       maxHp_ = other.maxHp_;
       posX_ = other.posX_;
       posY_ = other.posY_;
-      state_ = other.state_;
+      stateFlags_ = other.stateFlags_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -174,14 +174,14 @@ namespace Protocol {
       }
     }
 
-    /// <summary>Field number for the "state" field.</summary>
-    public const int StateFieldNumber = 9;
-    private global::Protocol.CreatureState state_ = global::Protocol.CreatureState.Idle;
+    /// <summary>Field number for the "stateFlags" field.</summary>
+    public const int StateFlagsFieldNumber = 9;
+    private int stateFlags_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protocol.CreatureState State {
-      get { return state_; }
+    public int StateFlags {
+      get { return stateFlags_; }
       set {
-        state_ = value;
+        stateFlags_ = value;
       }
     }
 
@@ -206,7 +206,7 @@ namespace Protocol {
       if (MaxHp != other.MaxHp) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(PosX, other.PosX)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(PosY, other.PosY)) return false;
-      if (State != other.State) return false;
+      if (StateFlags != other.StateFlags) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -221,7 +221,7 @@ namespace Protocol {
       if (MaxHp != 0) hash ^= MaxHp.GetHashCode();
       if (PosX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(PosX);
       if (PosY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(PosY);
-      if (State != global::Protocol.CreatureState.Idle) hash ^= State.GetHashCode();
+      if (StateFlags != 0) hash ^= StateFlags.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -270,9 +270,9 @@ namespace Protocol {
         output.WriteRawTag(69);
         output.WriteFloat(PosY);
       }
-      if (State != global::Protocol.CreatureState.Idle) {
+      if (StateFlags != 0) {
         output.WriteRawTag(72);
-        output.WriteEnum((int) State);
+        output.WriteInt32(StateFlags);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -315,9 +315,9 @@ namespace Protocol {
         output.WriteRawTag(69);
         output.WriteFloat(PosY);
       }
-      if (State != global::Protocol.CreatureState.Idle) {
+      if (StateFlags != 0) {
         output.WriteRawTag(72);
-        output.WriteEnum((int) State);
+        output.WriteInt32(StateFlags);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -352,8 +352,8 @@ namespace Protocol {
       if (PosY != 0F) {
         size += 1 + 4;
       }
-      if (State != global::Protocol.CreatureState.Idle) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
+      if (StateFlags != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(StateFlags);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -390,8 +390,8 @@ namespace Protocol {
       if (other.PosY != 0F) {
         PosY = other.PosY;
       }
-      if (other.State != global::Protocol.CreatureState.Idle) {
-        State = other.State;
+      if (other.StateFlags != 0) {
+        StateFlags = other.StateFlags;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -440,7 +440,7 @@ namespace Protocol {
             break;
           }
           case 72: {
-            State = (global::Protocol.CreatureState) input.ReadEnum();
+            StateFlags = input.ReadInt32();
             break;
           }
         }
@@ -490,7 +490,7 @@ namespace Protocol {
             break;
           }
           case 72: {
-            State = (global::Protocol.CreatureState) input.ReadEnum();
+            StateFlags = input.ReadInt32();
             break;
           }
         }

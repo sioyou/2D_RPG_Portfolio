@@ -5,14 +5,14 @@
 
 namespace
 {
-	void FillStat(const CreatureStat& stat, Protocol::ObjectInfo* info)
+	void FillStat(const CreatureStat& stat, int32 stateFlags, Protocol::ObjectInfo* info)
 	{
 		info->set_level(stat.GetLevel());
 		info->set_hp(stat.GetHp());
 		info->set_maxhp(stat.GetMaxHp());
 		info->set_posx(stat.GetPosX());
 		info->set_posy(stat.GetPosY());
-		info->set_state(Protocol::CREATURE_STATE_IDLE);
+		info->set_stateflags(stateFlags);
 	}
 }
 
@@ -24,7 +24,7 @@ void GameProtocolUtil::FillObjectInfo(const PlayerRef& player, Protocol::ObjectI
 	info->set_objectid(player->GetObjectId());
 	info->set_objecttype(Protocol::OBJECT_TYPE_PLAYER);
 	info->set_name(player->GetPlayerId());
-	FillStat(player->GetStat(), info);
+	FillStat(player->GetStat(), player->GetStateFlags(), info);
 }
 
 void GameProtocolUtil::FillObjectInfo(const MonsterRef& monster, Protocol::ObjectInfo* info)
@@ -35,5 +35,5 @@ void GameProtocolUtil::FillObjectInfo(const MonsterRef& monster, Protocol::Objec
 	info->set_objectid(monster->GetObjectId());
 	info->set_objecttype(Protocol::OBJECT_TYPE_MONSTER);
 	info->set_name(monster->GetName());
-	FillStat(monster->GetStat(), info);
+	FillStat(monster->GetStat(), monster->GetStateFlags(), info);
 }
