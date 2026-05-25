@@ -165,7 +165,7 @@ public class NetworkManager
         Debug.Log("[NetworkManager] C_S_ENTER_GAME sent.");
     }
 
-    public void HandleEnterGameResponse(bool success, int myObjectId, Google.Protobuf.Collections.RepeatedField<ObjectInfo> spawns)
+    public void HandleEnterGameResponse(bool success, int myObjectId, Google.Protobuf.Collections.RepeatedField<SpawnEntry> spawns)
     {
         if (success)
         {

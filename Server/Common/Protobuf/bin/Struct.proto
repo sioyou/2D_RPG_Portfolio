@@ -1,0 +1,32 @@
+syntax = "proto3";
+package Protocol;
+
+import "Enum.proto";
+
+message ObjectInfo
+{
+	int32 objectId = 1;
+	GameObjectType objectType = 2;
+	string name = 3;
+	int32 level = 4;
+	int32 hp = 5;
+	int32 maxHp = 6;
+	float posX = 7;
+	float posY = 8;
+	int32 stateFlags = 9;
+}
+
+message MonsterInfo
+{
+	ObjectInfo objectInfo = 1;
+	MonsterType monsterType = 2;
+}
+
+message SpawnEntry
+{
+	oneof body
+	{
+		ObjectInfo player = 1;
+		MonsterInfo monster = 2;
+	}
+}

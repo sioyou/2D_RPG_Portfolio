@@ -41,10 +41,10 @@ public static class PacketHandler
     public static void S_C_SPAWNHandler(PacketSession session, IMessage packet)
     {
         var pkt = packet as S_C_SPAWN;
-        if (pkt?.Info == null)
+        if (pkt?.Spawn == null)
             return;
 
-        Managers.Object.Spawn(pkt.Info);
+        Managers.Object.Spawn(pkt.Spawn);
     }
 
     public static void S_C_DESPAWNHandler(PacketSession session, IMessage packet)

@@ -26,16 +26,48 @@ public class ObjectManager
     public Transform ItemHolderRoot => GetRootTransform("@ItemHolders");
     #endregion
 
-    public void SpawnAll(IEnumerable<ObjectInfo> spawns)
+    public void SpawnAll(IEnumerable<SpawnEntry> spawns)
     {
         if (spawns == null)
             return;
 
-        foreach (ObjectInfo info in spawns)
-            Spawn(info);
+        foreach (SpawnEntry entry in spawns)
+            Spawn(entry);
+    }
+
+    public void Spawn(SpawnEntry entry)
+    {
+        if (entry == null)
+            return;
+
+        switch (entry.BodyCase)
+        {
+            case SpawnEntry.BodyOneofCase.Player:
+                Spawn(entry.Player);
+                break;
+            case SpawnEntry.BodyOneofCase.Monster:
+                Spawn(entry.Monster);
+                break;
+            default:
+                Debug.LogWarning("[ObjectManager] Spawn entry has no body.");
+                break;
+        }
     }
 
     public void Spawn(ObjectInfo info)
+    {
+        SpawnInternal(info, MonsterType.None);
+    }
+
+    public void Spawn(MonsterInfo monsterInfo)
+    {
+        if (monsterInfo?.ObjectInfo == null)
+            return;
+
+        SpawnInternal(monsterInfo.ObjectInfo, monsterInfo.MonsterType);
+    }
+
+    void SpawnInternal(ObjectInfo info, MonsterType monsterType)
     {
         if (info == null)
             return;
@@ -50,10 +82,10 @@ public class ObjectManager
             _ => EnvRoot,
         };
 
-        GameObject go = TryInstantiatePrefab(info, parent);
+        GameObject go = TryInstantiatePrefab(info, monsterType, parent);
         if (go == null)
         {
-            Debug.LogError($"Disable Prefab :{info.ObjectId}");
+            Debug.LogError($"[ObjectManager] Failed to load prefab. objectId={info.ObjectId} type={info.ObjectType} monsterType={monsterType}");
             return;
         }
 
@@ -67,7 +99,7 @@ public class ObjectManager
         obj.SetInfo(info);
         _objects[info.ObjectId] = go;
 
-        Debug.Log($"[ObjectManager] Spawn objectId={info.ObjectId} type={info.ObjectType} " +
+        Debug.Log($"[ObjectManager] Spawn objectId={info.ObjectId} type={info.ObjectType} monsterType={monsterType} " +
                   $"lv={info.Level} hp={info.Hp}/{info.MaxHp} pos=({info.PosX},{info.PosY})");
     }
 
@@ -166,15 +198,9 @@ public class ObjectManager
             UnityEngine.Object.Destroy(component);
     }
 
-    GameObject TryInstantiatePrefab(ObjectInfo info, Transform parent)
+    static GameObject TryInstantiatePrefab(ObjectInfo info, MonsterType monsterType, Transform parent)
     {
-        string key = info.ObjectType switch
-        {
-            GameObjectType.ObjectTypePlayer => "Player",
-            GameObjectType.ObjectTypeMonster => "Monster",
-            _ => string.Empty,
-        };
-
+        string key = ResolvePrefabKey(info, monsterType);
         if (string.IsNullOrEmpty(key))
             return null;
 
@@ -182,6 +208,24 @@ public class ObjectManager
             return null;
 
         return Managers.Resource.Instantiate(key, parent);
+    }
+
+    static string ResolvePrefabKey(ObjectInfo info, MonsterType monsterType)
+    {
+        switch (info.ObjectType)
+        {
+            case GameObjectType.ObjectTypePlayer:
+                return "Player";
+            case GameObjectType.ObjectTypeMonster:
+                return monsterType switch
+                {
+                    MonsterType.Frog => "FrogMonster",
+                    MonsterType.Wood => "WoodMonster",
+                    _ => string.Empty,
+                };
+            default:
+                return string.Empty;
+        }
     }
 
 }

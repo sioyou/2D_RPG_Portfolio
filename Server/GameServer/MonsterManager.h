@@ -8,7 +8,7 @@
 class MonsterManager
 {
 public:
-	MonsterRef Spawn(int32 zoneId, int32 templateId, const string& name, int32 level, int32 maxHp, float posX, float posY);
+	MonsterRef Spawn(int32 zoneId, Protocol::MonsterType monsterType, int32 level, float posX, float posY);
 	void Despawn(int32 objectId);
 
 	MonsterRef FindByObjectId(int32 objectId);

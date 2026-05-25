@@ -22,7 +22,13 @@ MonoBehaviour:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5e4732511eb455c46af69451aefab63d
-    m_Address: Monster
+    m_Address: FrogMonster
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d5566bcd1f6c734286cbdb48d6daf0b
+    m_Address: WoodMonster
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -33,14 +39,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d69e67e8b9c862f42a18b68ce09069c5
-    m_Address: Player
+  - m_GUID: a5c49702a2e749fda32eb8c5fd0bae78
+    m_Address: InputSystem_Actions
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a5c49702a2e749fda32eb8c5fd0bae78
-    m_Address: InputSystem_Actions
+  - m_GUID: d69e67e8b9c862f42a18b68ce09069c5
+    m_Address: Player
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload

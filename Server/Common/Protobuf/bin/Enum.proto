@@ -1,0 +1,25 @@
+﻿syntax = "proto3";
+package Protocol;
+
+enum CreatureState
+{
+	CREATURE_STATE_NONE = 0;
+	CREATURE_STATE_MOVE = 1;
+	CREATURE_STATE_ATTACK = 2;
+	CREATURE_STATE_SKILL = 3;
+}
+
+enum GameObjectType
+{
+	OBJECT_TYPE_NONE = 0;
+	OBJECT_TYPE_PLAYER = 1;
+	OBJECT_TYPE_PROJECTILE = 2;
+	OBJECT_TYPE_MONSTER = 3;
+}
+
+enum MonsterType
+{
+	MONSTER_TYPE_NONE = 0;
+	MONSTER_TYPE_FROG = 1;
+	MONSTER_TYPE_WOOD = 2;
+}

@@ -37,7 +37,7 @@ bool ZoneManager::EnterGame(PlayerRef player, Protocol::S_C_ENTER_GAME& outPkt)
 	if (zone->HasPlayer(player) == false)
 	{
 		Protocol::S_C_SPAWN spawnPkt;
-		GameProtocolUtil::FillObjectInfo(player, spawnPkt.mutable_info());
+		GameProtocolUtil::FillPlayerSpawn(player, spawnPkt.mutable_spawn());
 		SendBufferRef spawnBuffer = ClientPacketHandler::MakeSendBuffer(spawnPkt);
 		zone->Broadcast(spawnBuffer);
 	}
@@ -106,7 +106,7 @@ void ZoneManager::InitDefaultZone(ZoneRef zone)
 
 	const int32 zoneId = zone->GetZoneId();
 
-	GMonsterManager.Spawn(zoneId, 1, "Slime", 1, 50, -2.f, 0.f);
-	GMonsterManager.Spawn(zoneId, 1, "Slime", 1, 50, 2.f, 1.f);
-	GMonsterManager.Spawn(zoneId, 2, "Goblin", 3, 120, 5.f, -1.f);
+	GMonsterManager.Spawn(zoneId, Protocol::MONSTER_TYPE_FROG, 1, -2.f, 0.f);
+	GMonsterManager.Spawn(zoneId, Protocol::MONSTER_TYPE_FROG, 1, 2.f, 1.f);
+	GMonsterManager.Spawn(zoneId, Protocol::MONSTER_TYPE_WOOD, 1, 5.f, -1.f);
 }

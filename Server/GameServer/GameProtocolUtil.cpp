@@ -37,3 +37,21 @@ void GameProtocolUtil::FillObjectInfo(const MonsterRef& monster, Protocol::Objec
 	info->set_name(monster->GetName());
 	FillStat(monster->GetStat(), monster->GetStateFlags(), info);
 }
+
+void GameProtocolUtil::FillPlayerSpawn(const PlayerRef& player, Protocol::SpawnEntry* entry)
+{
+	if (player == nullptr || entry == nullptr)
+		return;
+
+	FillObjectInfo(player, entry->mutable_player());
+}
+
+void GameProtocolUtil::FillMonsterSpawn(const MonsterRef& monster, Protocol::SpawnEntry* entry)
+{
+	if (monster == nullptr || entry == nullptr)
+		return;
+
+	Protocol::MonsterInfo* monsterInfo = entry->mutable_monster();
+	FillObjectInfo(monster, monsterInfo->mutable_objectinfo());
+	monsterInfo->set_monstertype(monster->GetTemplateId());
+}

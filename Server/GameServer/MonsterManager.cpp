@@ -4,24 +4,21 @@
 
 MonsterManager GMonsterManager;
 
-MonsterRef MonsterManager::Spawn(int32 zoneId, int32 templateId, const string& name, int32 level, int32 maxHp, float posX, float posY)
+MonsterRef MonsterManager::Spawn(int32 zoneId, Protocol::MonsterType monsterType, int32 level, float posX, float posY)
 {
 	const int32 objectId = ObjectIdGenerator::Generate();
 
 	MonsterRef monster = make_shared<Monster>();
-	monster->Init(objectId, zoneId, templateId, name);
+	monster->Init(objectId, zoneId, monsterType, level);
 
 	CreatureStat& stat = monster->GetStat();
-	stat.SetLevel(level);
-	stat.SetMaxHp(maxHp);
-	stat.SetHp(maxHp);
 	stat.SetPosition(posX, posY);
 
 	WRITE_LOCK;
 	_monsters[objectId] = monster;
 
 	cout << "[MonsterManager] Spawn. zoneId=" << zoneId
-		<< " objectId=" << objectId << " name=" << name << endl;
+		<< " objectId=" << objectId << " name=" << monster->GetName() << endl;
 	return monster;
 }
 

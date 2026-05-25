@@ -68,15 +68,15 @@ void Zone::FillEnterGameSpawns(Protocol::S_C_ENTER_GAME& pkt)
 		READ_LOCK;
 		for (const auto& pair : _players)
 		{
-			Protocol::ObjectInfo* info = pkt.add_spawns();
-			GameProtocolUtil::FillObjectInfo(pair.second, info);
+			Protocol::SpawnEntry* spawn = pkt.add_spawns();
+			GameProtocolUtil::FillPlayerSpawn(pair.second, spawn);
 		}
 	}
 
 	GMonsterManager.ForEachInZone(_zoneId, [&pkt](MonsterRef monster)
 		{
-			Protocol::ObjectInfo* info = pkt.add_spawns();
-			GameProtocolUtil::FillObjectInfo(monster, info);
+			Protocol::SpawnEntry* spawn = pkt.add_spawns();
+			GameProtocolUtil::FillMonsterSpawn(monster, spawn);
 		});
 }
 

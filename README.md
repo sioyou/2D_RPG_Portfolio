@@ -43,16 +43,19 @@ Unity 클라이언트와 Windows C++ 게임 서버로 구성된 2D RPG 포트폴
 
 ## Protocol Buffers
 
-- 정의: `Server/Common/Protobuf/bin/*.proto`
-- 생성 스크립트: `Server/Common/Protobuf/bin/GenPackets.bat`
-- GameServer 빌드 시 `Server/Common/Protobuf/ProtobufCodegen.targets`가 proto 변경을 감지해 자동 실행합니다.
+- **Git에 포함:** `Server/Common/Protobuf/bin/*.proto`, `GenPackets.bat` (패킷 스키마 원본)
+- **Git에 미포함:** `*.pb.cc` / `*.pb.h` / `ClientPacketHandler.h` / Unity `Packet/Generated/*.cs` (생성물)
+- **로컬 도구:** `bin` 폴더에 `protoc.exe`, `PacketGenerator.exe` 필요 ([Server/readme.txt](Server/readme.txt) 참고)
+- GameServer·DummyClient 빌드 시 `ProtobufCodegen.targets`가 proto 변경을 감지해 `GenPackets.bat`을 자동 실행합니다.
 
-수동 생성:
+클론 후 Unity만 열 때는 먼저 아래를 실행하세요.
 
 ```bat
 cd Server\Common\Protobuf\bin
 GenPackets.bat
 ```
+
+수동 생성도 동일합니다.
 
 ## 프로젝트 구조
 

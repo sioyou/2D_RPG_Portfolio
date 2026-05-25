@@ -161,6 +161,16 @@ Gemfile.lock
 *.sln
 *.suo
 
+### Protobuf (source: Server/Common/Protobuf/bin/*.proto — run GenPackets.bat)
+Server/GameServer/*.pb.cc
+Server/GameServer/*.pb.h
+Server/GameServer/ClientPacketHandler.h
+Server/DummyClient/*.pb.cc
+Server/DummyClient/*.pb.h
+Client/Assets/@Scripts/Packet/Generated/*
+!Client/Assets/@Scripts/Packet/Generated/
+!Client/Assets/@Scripts/Packet/Generated/.gitkeep
+
 ### Cursor
 .cursor/
 
@@ -192,6 +202,15 @@ x86/
 [Aa][Rr][Mm]64/
 [Bb]in/
 [Oo]bj/
+
+# Protobuf tooling (folder name is "bin" — override [Bb]in/ above)
+!Server/Common/Protobuf/bin/
+Server/Common/Protobuf/bin/*
+!Server/Common/Protobuf/bin/*.proto
+!Server/Common/Protobuf/bin/GenPackets.bat
+!Server/Common/Protobuf/bin/GenPacket.bat
+!Server/Common/Protobuf/bin/Templates/
+!Server/Common/Protobuf/bin/Templates/**
 
 # Visual Studio cache/options directory
 .vs/

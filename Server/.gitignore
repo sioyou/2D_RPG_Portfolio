@@ -21,6 +21,13 @@ Debug/
 Release/
 x64/
 bin/
+!Common/Protobuf/bin/
+Common/Protobuf/bin/*
+!Common/Protobuf/bin/*.proto
+!Common/Protobuf/bin/GenPackets.bat
+!Common/Protobuf/bin/GenPacket.bat
+!Common/Protobuf/bin/Templates/
+!Common/Protobuf/bin/Templates/**
 build/
 
 # 사용자별 설정 파일
