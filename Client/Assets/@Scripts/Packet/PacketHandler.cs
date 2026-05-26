@@ -69,6 +69,7 @@ public static class PacketHandler
 
         creature.ApplyDestPosition(new Vector2(pkt.PosX, pkt.PosY));
         creature.ApplyStateFlags(pkt.StateFlags);
+        creature.ApplyMoveDirection(pkt.DirX, pkt.DirY);
     }
 
     public static void S_C_ATTACKHandler(PacketSession session, IMessage packet)

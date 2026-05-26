@@ -49,3 +49,10 @@ public static class SortingLayers
 	public const int SKILL_EFFECT = 315;
 	public const int DAMAGE_FONT = 410;
 }
+
+public static class AnimName
+{
+    public const string IDLE = "Idle";
+    public const string MOVE = "Move";
+    public const string HIT = "Hit";
+}

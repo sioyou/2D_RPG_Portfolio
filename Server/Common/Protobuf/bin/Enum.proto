@@ -7,6 +7,7 @@ enum CreatureState
 	CREATURE_STATE_MOVE = 1;
 	CREATURE_STATE_ATTACK = 2;
 	CREATURE_STATE_SKILL = 3;
+	CREATURE_STATE_DAMAGED = 4;
 }
 
 enum GameObjectType

@@ -117,6 +117,7 @@ public class MyPlayerObject : PlayerObject
 
         _moveDir = dir;
         UpdateMoveStateFromInput(dir.sqrMagnitude > 0.0001f);
+        ApplyFacing(_moveDir.x);
     }
 
     void UpdateMoveStateFromInput(bool isMoving)
@@ -143,6 +144,11 @@ public class MyPlayerObject : PlayerObject
     public override void ApplyStateFlags(int stateFlags)
     {
         // 내 캐릭 상태는 로컬 입력·스킬에서 결정.
+    }
+
+    public override void ApplyMoveDirection(float dirX, float dirY)
+    {
+        // 내 캐릭 방향은 로컬 입력(UpdateInput)에서 결정.
     }
 
     void UpdateSendMovePacket()

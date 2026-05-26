@@ -97,6 +97,8 @@ bool Handle_C_S_MOVE(PacketSessionRef& session, Protocol::C_S_MOVE& pkt)
 	movePkt.set_posx(validatedX);
 	movePkt.set_posy(validatedY);
 	movePkt.set_stateflags(stateFlags);
+	movePkt.set_dirx(player->GetMoveDirX());
+	movePkt.set_diry(player->GetMoveDirY());
 
 	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(movePkt);
 	zone->Broadcast(sendBuffer);

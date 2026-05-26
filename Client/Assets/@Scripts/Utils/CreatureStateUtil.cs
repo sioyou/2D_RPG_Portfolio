@@ -2,20 +2,12 @@
 
 public static class CreatureStateUtil
 {
-    public const int MoveBit = 1 << 0;
-    public const int AttackBit = 1 << 1;
-    public const int SkillBit = 1 << 2;
-    public const int AllActionBits = MoveBit | AttackBit | SkillBit;
-
     public static int ToBitMask(CreatureState state)
     {
-        return state switch
-        {
-            CreatureState.Move => MoveBit,
-            CreatureState.Attack => AttackBit,
-            CreatureState.Skill => SkillBit,
-            _ => 0,
-        };
+        if (state == CreatureState.None)
+            return 0;
+
+        return 1 << (int)state;
     }
 
     public static bool HasFlag(int flags, CreatureState state)
@@ -39,15 +31,13 @@ public static class CreatureStateUtil
 
     public static int Sanitize(int clientFlags, float dirX, float dirY)
     {
-        int flags = clientFlags & AllActionBits;
-
         bool dirMoving = dirX != 0f || dirY != 0f;
-        if (HasFlag(flags, CreatureState.Move) == false && dirMoving)
-            flags = AddFlag(flags, CreatureState.Move);
+        if (HasFlag(clientFlags, CreatureState.Move) == false && dirMoving)
+            clientFlags = AddFlag(clientFlags, CreatureState.Move);
 
-        if (HasFlag(flags, CreatureState.Move) && dirMoving == false)
-            flags = RemoveFlag(flags, CreatureState.Move);
+        if (HasFlag(clientFlags, CreatureState.Move) && dirMoving == false)
+            clientFlags = RemoveFlag(clientFlags, CreatureState.Move);
 
-        return flags;
+        return clientFlags;
     }
 }

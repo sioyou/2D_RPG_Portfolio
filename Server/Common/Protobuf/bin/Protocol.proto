@@ -59,6 +59,8 @@ message S_C_MOVE
 	float posX = 2;
 	float posY = 3;
 	int32 stateFlags = 4;
+	float dirX = 5;
+	float dirY = 6;
 }
 
 
