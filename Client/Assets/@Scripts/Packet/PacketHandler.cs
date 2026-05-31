@@ -1,4 +1,4 @@
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using Protocol;
 using ServerCore;
 using UnityEngine;
@@ -74,12 +74,39 @@ public static class PacketHandler
 
     public static void S_C_ATTACKHandler(PacketSession session, IMessage packet)
     {
-        Debug.Log("S_C_ATTACK");
+        var pkt = packet as S_C_ATTACK;
+        if (pkt == null)
+            return;
+
+        CreatureObject attacker = Managers.Object.Find<CreatureObject>(pkt.AttackerId);
+        attacker?.ApplyAttack(pkt.DirX, pkt.DirY);
+
+        if (pkt.TargetId == 0)
+            return;
+
+        CreatureObject target = Managers.Object.Find<CreatureObject>(pkt.TargetId);
+        if (target == null)
+            return;
+
+        float faceDirX = pkt.TargetDirX;
+        if (Mathf.Abs(faceDirX) <= 0.0001f && Mathf.Abs(pkt.TargetDirY) <= 0.0001f)
+        {
+            faceDirX = -pkt.DirX;
+            if (attacker != null)
+                faceDirX = attacker.transform.position.x - target.transform.position.x;
+        }
+        
+        target.ApplyDamaged(faceDirX);
     }
 
     public static void S_C_DIEHandler(PacketSession session, IMessage packet)
     {
-        Debug.Log("S_C_DIE");
+        var pkt = packet as S_C_DIE;
+        if (pkt == null)
+            return;
+
+        CreatureObject creature = Managers.Object.Find<CreatureObject>(pkt.ObjectId);
+        creature?.ApplyDie();
     }
 
     public static void S_C_CHATHandler(PacketSession session, IMessage packet)

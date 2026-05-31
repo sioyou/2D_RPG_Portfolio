@@ -14,6 +14,8 @@ message ObjectInfo
 	float posX = 7;
 	float posY = 8;
 	int32 stateFlags = 9;
+	float dirX = 10;
+	float dirY = 11;
 }
 
 message MonsterInfo

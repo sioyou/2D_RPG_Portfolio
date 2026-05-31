@@ -3,8 +3,8 @@
 
 void Monster::Init(int32 objectId, int32 zoneId, Protocol::MonsterType monsterType, int32 level)
 {
-	_objectId = objectId;
-	_zoneId = zoneId;
+	SetObjectId(objectId);
+	SetZoneId(zoneId);
 	_monsterType = monsterType;
 
 	CreatureStat& stat = GetStat();

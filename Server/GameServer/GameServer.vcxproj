@@ -175,8 +175,9 @@
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="GameSessionManager.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Creature.cpp" />
     <ClCompile Include="CreatureStat.cpp" />
-    <ClCompile Include="MonsterManager.cpp" />
+    <ClCompile Include="CreatureManager.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="Protocol.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -208,9 +209,10 @@
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="GameSessionManager.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Creature.h" />
     <ClInclude Include="CreatureStat.h" />
     <ClInclude Include="CreatureStateUtil.h" />
-    <ClInclude Include="MonsterManager.h" />
+    <ClInclude Include="CreatureManager.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Protocol.pb.h" />

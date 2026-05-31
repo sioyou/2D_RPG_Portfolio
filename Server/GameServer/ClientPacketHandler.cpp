@@ -3,6 +3,8 @@
 #include "GameSession.h"
 #include "PlayerManager.h"
 #include "ZoneManager.h"
+#include "CreatureManager.h"
+#include "Creature.h"
 #include "CreatureStateUtil.h"
 
 PacketHandlerFunc GPacketHandler[UINT16_MAX];
@@ -86,7 +88,8 @@ bool Handle_C_S_MOVE(PacketSessionRef& session, Protocol::C_S_MOVE& pkt)
 	zone->ValidateClientPosition(player, pkt.posx(), pkt.posy(), validatedX, validatedY);
 
 	player->GetStat().SetPosition(validatedX, validatedY);
-	player->SetMoveDirection(pkt.dirx(), pkt.diry());
+	if (pkt.dirx() != 0.f || pkt.diry() != 0.f)
+		player->SetMoveDirection(pkt.dirx(), pkt.diry());
 
 	const int32 stateFlags = CreatureStateUtil::SanitizeStateFlags(
 		pkt.stateflags(), player->GetMoveDirX(), player->GetMoveDirY());
@@ -107,6 +110,81 @@ bool Handle_C_S_MOVE(PacketSessionRef& session, Protocol::C_S_MOVE& pkt)
 
 bool Handle_C_S_ATTACK(PacketSessionRef& session, Protocol::C_S_ATTACK& pkt)
 {
+	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+	PlayerRef attacker = GPlayerManager.FindBySession(gameSession);
+	if (attacker == nullptr)
+		return false;
+
+	if (attacker->GetState() != EPlayerState::InGame)
+		return false;
+
+	ZoneRef zone = GZoneManager.GetZone(attacker->GetZoneId());
+	if (zone == nullptr)
+		return false;
+
+	constexpr uint64 ATTACK_COOLDOWN_MS = 500;
+	const uint64 now = ::GetTickCount64();
+	if (now - attacker->GetLastAttackTick() < ATTACK_COOLDOWN_MS)
+		return true;
+
+	attacker->SetLastAttackTick(now);
+	attacker->SetMoveDirection(pkt.dirx(), pkt.diry());
+
+	constexpr float ATTACK_RANGE = 1.5f;
+	constexpr int32 ATTACK_DAMAGE = 10;
+
+	const float ax = attacker->GetStat().GetPosX();
+	const float ay = attacker->GetStat().GetPosY();
+
+	MonsterRef hitMonster = nullptr;
+	float targetDirX = 0.f;
+	float targetDirY = 0.f;
+	int32 damageDealt = 0;
+
+	GCreatureManager.ForEachMonsterInZone(attacker->GetZoneId(), [&](MonsterRef monster)
+	{
+		if (hitMonster != nullptr)
+			return;
+
+		if (monster->IsAlive() == false)
+			return;
+
+		const float mx = monster->GetStat().GetPosX();
+		const float my = monster->GetStat().GetPosY();
+		const float dx = mx - ax;
+		const float dy = my - ay;
+		if (dx * dx + dy * dy > ATTACK_RANGE * ATTACK_RANGE)
+			return;
+
+		damageDealt = monster->TakeDamage(ATTACK_DAMAGE);
+		if (damageDealt <= 0)
+			return;
+
+		hitMonster = monster;
+		monster->FaceToward(ax, ay);
+		targetDirX = monster->GetMoveDirX();
+		targetDirY = monster->GetMoveDirY();
+	});
+
+	const int32 hitTargetId = hitMonster != nullptr ? hitMonster->GetObjectId() : 0;
+
+	Protocol::S_C_ATTACK attackPkt;
+	attackPkt.set_attackerid(attacker->GetObjectId());
+	attackPkt.set_dirx(pkt.dirx());
+	attackPkt.set_diry(pkt.diry());
+	attackPkt.set_targetid(hitTargetId);
+	attackPkt.set_damage(damageDealt);
+	attackPkt.set_targetdirx(targetDirX);
+	attackPkt.set_targetdiry(targetDirY);
+
+	zone->Broadcast(ClientPacketHandler::MakeSendBuffer(attackPkt));
+
+	if (hitMonster != nullptr && hitMonster->IsDead())
+	{
+		CreatureRef deadCreature = static_pointer_cast<Creature>(hitMonster);
+		GZoneManager.HandleCreatureDeath(zone, deadCreature);
+		GCreatureManager.Remove(deadCreature->GetObjectId());
+	}
 
 	return true;
 }

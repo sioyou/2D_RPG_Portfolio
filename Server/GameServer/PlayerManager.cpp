@@ -3,6 +3,7 @@
 #include "GameSession.h"
 #include "ObjectIdGenerator.h"
 #include "ZoneManager.h"
+#include "CreatureManager.h"
 
 PlayerManager GPlayerManager;
 
@@ -27,6 +28,8 @@ bool PlayerManager::Login(GameSessionRef session, const string& playerId, Player
 
 	if (Register(player) == false)
 		return false;
+
+	GCreatureManager.Add(player);
 
 	outPlayer = player;
 	cout << "[PlayerManager] Login. playerId=" << playerId
@@ -53,6 +56,7 @@ void PlayerManager::Logout(GameSessionRef session)
 
 	cout << "[PlayerManager] Logout. playerId=" << player->GetPlayerId() << endl;
 	GZoneManager.LeaveGame(player);
+	GCreatureManager.Remove(player->GetObjectId());
 	Unregister(player);
 }
 

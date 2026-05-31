@@ -32,9 +32,6 @@ public static class CreatureStateUtil
     public static int Sanitize(int clientFlags, float dirX, float dirY)
     {
         bool dirMoving = dirX != 0f || dirY != 0f;
-        if (HasFlag(clientFlags, CreatureState.Move) == false && dirMoving)
-            clientFlags = AddFlag(clientFlags, CreatureState.Move);
-
         if (HasFlag(clientFlags, CreatureState.Move) && dirMoving == false)
             clientFlags = RemoveFlag(clientFlags, CreatureState.Move);
 

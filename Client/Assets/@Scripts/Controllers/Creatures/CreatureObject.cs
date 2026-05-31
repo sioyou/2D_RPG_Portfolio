@@ -1,8 +1,12 @@
-﻿using Protocol;
+﻿using System.Collections;
+using Protocol;
 using UnityEngine;
 
 public class CreatureObject : BaseObject
 {
+    const float DieFallbackDuration = 0.5f;
+
+    Coroutine _dieRoutine;
     MoveComponent _move;
     StateComponent _state;
     AnimComponent _anim;
@@ -46,6 +50,15 @@ public class CreatureObject : BaseObject
 
         SyncDestinationToCurrent();
         ApplyStateFlags(info.StateFlags);
+        ApplySpawnFacing(info.DirX, info.DirY);
+    }
+
+    protected void ApplySpawnFacing(float dirX, float dirY)
+    {
+        if (Mathf.Abs(dirX) <= 0.0001f && Mathf.Abs(dirY) <= 0.0001f)
+            dirX = 1f;
+
+        ApplyFacing(dirX);
     }
 
     public virtual void ApplyDestPosition(Vector2 pos)
@@ -61,6 +74,80 @@ public class CreatureObject : BaseObject
     public virtual void ApplyMoveDirection(float dirX, float dirY)
     {
         ApplyFacing(dirX);
+    }
+
+    public virtual void ApplyAttack(float dirX, float dirY)
+    {
+        ApplyFacing(dirX);
+        _state?.AddState(CreatureState.Attack);
+        Invoke(nameof(ClearAttackState), 0.5f);
+    }
+
+    public virtual void ApplyDamaged(float faceDirX)
+    {
+        if (State != null && State.HasState(CreatureState.Dead))
+            return;
+
+        ApplyFacing(faceDirX);
+        _state?.AddState(CreatureState.Damaged);
+        Invoke(nameof(ClearDamagedState), 0.3f);
+    }
+
+    public virtual void ApplyDie()
+    {
+        CancelTransientStateInvokes();
+        StopDieRoutine();
+
+        _state?.ApplyNetworkFlags(CreatureStateUtil.ToBitMask(CreatureState.Dead));
+        _dieRoutine = StartCoroutine(CoDieAndDespawn());
+    }
+
+    IEnumerator CoDieAndDespawn()
+    {
+        float duration = Anim != null ? Anim.GetClipLength(AnimName.DIE) : DieFallbackDuration;
+        if (duration <= 0f)
+            duration = DieFallbackDuration;
+
+        yield return new WaitForSeconds(duration);
+
+        _dieRoutine = null;
+        DespawnAfterDie();
+    }
+
+    protected virtual void DespawnAfterDie()
+    {
+        if (Info != null)
+            Managers.Object.Despawn(Info.ObjectId);
+    }
+
+    void StopDieRoutine()
+    {
+        if (_dieRoutine == null)
+            return;
+
+        StopCoroutine(_dieRoutine);
+        _dieRoutine = null;
+    }
+
+    void OnDestroy()
+    {
+        StopDieRoutine();
+    }
+
+    protected void CancelTransientStateInvokes()
+    {
+        CancelInvoke(nameof(ClearAttackState));
+        CancelInvoke(nameof(ClearDamagedState));
+    }
+
+    void ClearAttackState()
+    {
+        _state?.RemoveState(CreatureState.Attack);
+    }
+
+    void ClearDamagedState()
+    {
+        _state?.RemoveState(CreatureState.Damaged);
     }
 
     protected void ApplyFacing(float dirX)

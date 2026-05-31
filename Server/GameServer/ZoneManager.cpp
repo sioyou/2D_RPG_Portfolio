@@ -2,7 +2,7 @@
 #include "ZoneManager.h"
 #include "ClientPacketHandler.h"
 #include "GameProtocolUtil.h"
-#include "MonsterManager.h"
+#include "CreatureManager.h"
 
 ZoneManager GZoneManager;
 
@@ -86,6 +86,17 @@ void ZoneManager::BroadcastDespawn(ZoneRef zone, int32 objectId)
 	zone->Broadcast(sendBuffer);
 }
 
+void ZoneManager::HandleCreatureDeath(ZoneRef zone, CreatureRef creature)
+{
+	if (zone == nullptr || creature == nullptr)
+		return;
+
+	Protocol::S_C_DIE diePkt;
+	diePkt.set_objectid(creature->GetObjectId());
+	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(diePkt);
+	zone->Broadcast(sendBuffer);
+}
+
 ZoneRef ZoneManager::CreateZone(int32 zoneId)
 {
 	WRITE_LOCK;
@@ -106,7 +117,7 @@ void ZoneManager::InitDefaultZone(ZoneRef zone)
 
 	const int32 zoneId = zone->GetZoneId();
 
-	GMonsterManager.Spawn(zoneId, Protocol::MONSTER_TYPE_FROG, 1, -2.f, 0.f);
-	GMonsterManager.Spawn(zoneId, Protocol::MONSTER_TYPE_FROG, 1, 2.f, 1.f);
-	GMonsterManager.Spawn(zoneId, Protocol::MONSTER_TYPE_WOOD, 1, 5.f, -1.f);
+	GCreatureManager.SpawnMonster(zoneId, Protocol::MONSTER_TYPE_FROG, 1, -2.f, 0.f);
+	GCreatureManager.SpawnMonster(zoneId, Protocol::MONSTER_TYPE_FROG, 1, 2.f, 1.f);
+	GCreatureManager.SpawnMonster(zoneId, Protocol::MONSTER_TYPE_WOOD, 1, 5.f, -1.f);
 }

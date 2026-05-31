@@ -2,7 +2,7 @@
 #include "Zone.h"
 #include "GameSession.h"
 #include "GameProtocolUtil.h"
-#include "MonsterManager.h"
+#include "CreatureManager.h"
 
 namespace 
 {
@@ -64,19 +64,10 @@ void Zone::LeavePlayer(PlayerRef player)
 
 void Zone::FillEnterGameSpawns(Protocol::S_C_ENTER_GAME& pkt)
 {
-	{
-		READ_LOCK;
-		for (const auto& pair : _players)
+	GCreatureManager.ForEachInZone(_zoneId, [&pkt](CreatureRef creature)
 		{
 			Protocol::SpawnEntry* spawn = pkt.add_spawns();
-			GameProtocolUtil::FillPlayerSpawn(pair.second, spawn);
-		}
-	}
-
-	GMonsterManager.ForEachInZone(_zoneId, [&pkt](MonsterRef monster)
-		{
-			Protocol::SpawnEntry* spawn = pkt.add_spawns();
-			GameProtocolUtil::FillMonsterSpawn(monster, spawn);
+			GameProtocolUtil::FillSpawnEntry(creature, spawn);
 		});
 }
 

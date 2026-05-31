@@ -1,4 +1,4 @@
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using ServerCore;
 using System;
 using System.Collections.Generic;
@@ -179,6 +179,18 @@ public class NetworkManager
             Debug.LogWarning("[NetworkManager] Enter game failed.");
             OnEnterGameFailed?.Invoke();
         }
+    }
+
+    public void SendAttack(float dirX, float dirY)
+    {
+        if (GameServer.IsConnected() == false)
+            return;
+
+        Send(new C_S_ATTACK
+        {
+            DirX = dirX,
+            DirY = dirY,
+        });
     }
 
     public void SendMoveSync(float posX, float posY, float dirX, float dirY, int stateFlags)

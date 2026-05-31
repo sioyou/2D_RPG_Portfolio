@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Zone.h"
+#include "Creature.h"
 
 class ZoneManager
 {
@@ -11,6 +12,8 @@ public:
 	ZoneRef GetZone(int32 zoneId);
 	bool EnterGame(PlayerRef player, Protocol::S_C_ENTER_GAME& outPkt);
 	void LeaveGame(PlayerRef player);
+
+	void HandleCreatureDeath(ZoneRef zone, CreatureRef creature);
 
 private:
 	void BroadcastDespawn(ZoneRef zone, int32 objectId);

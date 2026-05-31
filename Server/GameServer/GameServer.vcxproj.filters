@@ -39,6 +39,9 @@
     <ClCompile Include="ObjectIdGenerator.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="Creature.cpp">
+      <Filter>GameContents</Filter>
+    </ClCompile>
     <ClCompile Include="CreatureStat.cpp">
       <Filter>GameContents</Filter>
     </ClCompile>
@@ -48,7 +51,7 @@
     <ClCompile Include="Monster.cpp">
       <Filter>GameContents</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterManager.cpp">
+    <ClCompile Include="CreatureManager.cpp">
       <Filter>GameContents</Filter>
     </ClCompile>
     <ClCompile Include="Zone.cpp">
@@ -89,6 +92,9 @@
     <ClInclude Include="ObjectIdGenerator.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="Creature.h">
+      <Filter>GameContents</Filter>
+    </ClInclude>
     <ClInclude Include="CreatureStat.h">
       <Filter>GameContents</Filter>
     </ClInclude>
@@ -98,7 +104,7 @@
     <ClInclude Include="Monster.h">
       <Filter>GameContents</Filter>
     </ClInclude>
-    <ClInclude Include="MonsterManager.h">
+    <ClInclude Include="CreatureManager.h">
       <Filter>GameContents</Filter>
     </ClInclude>
     <ClInclude Include="Zone.h">

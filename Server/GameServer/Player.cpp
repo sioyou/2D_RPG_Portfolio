@@ -10,7 +10,7 @@ Player::~Player()
 void Player::Init(const string& playerId, int32 objectId)
 {
 	_playerId = playerId;
-	_objectId = objectId;
+	SetObjectId(objectId);
 }
 
 void Player::SetSession(GameSessionRef session)
@@ -26,19 +26,4 @@ GameSessionRef Player::GetSession()
 bool Player::IsOnline() const
 {
 	return _session.lock() != nullptr;
-}
-
-void Player::SetMoveDirection(float dirX, float dirY)
-{
-	const float lengthSq = dirX * dirX + dirY * dirY;
-	if (lengthSq < 0.0001f)
-	{
-		_moveDirX = 0.f;
-		_moveDirY = 0.f;
-		return;
-	}
-
-	const float invLength = 1.f / sqrtf(lengthSq);
-	_moveDirX = dirX * invLength;
-	_moveDirY = dirY * invLength;
 }

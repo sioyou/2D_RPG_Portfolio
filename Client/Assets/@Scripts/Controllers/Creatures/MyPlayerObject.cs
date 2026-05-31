@@ -4,13 +4,16 @@ using UnityEngine;
 public class MyPlayerObject : PlayerObject
 {
     const float MoveDeadzoneSqr = 0.02f * 0.02f;
+    const float AttackCooldownTime = 0.5f;
 
     [SerializeField] float _correctionThreshold = 0.5f;
     [SerializeField] float _syncInterval = 0.1f;
 
     InputComponent _input;
     Vector2 _moveDir;
+    Vector2 _lastAimDir = Vector2.right;
     float _syncTimer;
+    float _attackCooldown;
 
     int _lastSentStateFlags = -1;
     float _lastSentPosX;
@@ -23,6 +26,11 @@ public class MyPlayerObject : PlayerObject
         base.OnInfoSet(info);
         Managers.Game.BindMyPlayer(this);
         State?.ClearActionFlags();
+
+        if (Mathf.Abs(info.DirX) > 0.0001f || Mathf.Abs(info.DirY) > 0.0001f)
+            _lastAimDir = new Vector2(info.DirX, info.DirY).normalized;
+        else
+            _lastAimDir = Vector2.right;
     }
 
     protected override void Start()
@@ -31,6 +39,7 @@ public class MyPlayerObject : PlayerObject
         BindCamera();
         _input = gameObject.GetOrAddComponent<InputComponent>();
         BindMoveEvents();
+        BindAttackEvents();
     }
 
     void BindCamera()
@@ -55,10 +64,32 @@ public class MyPlayerObject : PlayerObject
         Move.ArrivedAtDestination += OnMoveArrivedAtDestination;
     }
 
+    void BindAttackEvents()
+    {
+        if (_input == null)
+            return;
+
+        _input.OnAttackAction -= OnAttackInput;
+        _input.OnAttackAction += OnAttackInput;
+    }
+
     void OnDestroy()
     {
         if (Move != null)
             Move.ArrivedAtDestination -= OnMoveArrivedAtDestination;
+
+        if (_input != null)
+            _input.OnAttackAction -= OnAttackInput;
+    }
+
+    void OnAttackInput()
+    {
+        if (_attackCooldown > 0f)
+            return;
+
+        _attackCooldown = AttackCooldownTime;
+        State?.AddState(CreatureState.Attack);
+        Managers.Network.SendAttack(_lastAimDir.x, _lastAimDir.y);
     }
 
     protected override void Update()
@@ -88,6 +119,12 @@ public class MyPlayerObject : PlayerObject
 
     void UpdateAttack()
     {
+        _attackCooldown -= Time.deltaTime;
+        if (_attackCooldown <= 0f)
+        {
+            _attackCooldown = 0f;
+            State?.RemoveState(CreatureState.Attack);
+        }
     }
 
     void UpdateSkill()
@@ -116,8 +153,13 @@ public class MyPlayerObject : PlayerObject
             dir = Vector2.zero;
 
         _moveDir = dir;
+        if (_moveDir.sqrMagnitude > 0.0001f)
+            _lastAimDir = _moveDir.normalized;
+
         UpdateMoveStateFromInput(dir.sqrMagnitude > 0.0001f);
-        ApplyFacing(_moveDir.x);
+
+        float faceDirX = _moveDir.sqrMagnitude > 0.0001f ? _moveDir.x : _lastAimDir.x;
+        ApplyFacing(faceDirX);
     }
 
     void UpdateMoveStateFromInput(bool isMoving)
@@ -151,21 +193,24 @@ public class MyPlayerObject : PlayerObject
         // 내 캐릭 방향은 로컬 입력(UpdateInput)에서 결정.
     }
 
+    public override void ApplyDie()
+    {
+        CancelTransientStateInvokes();
+        State?.ApplyNetworkFlags(CreatureStateUtil.ToBitMask(CreatureState.Dead));
+    }
+
     void UpdateSendMovePacket()
     {
         if (State == null)
             return;
 
         int stateFlags = State.StateFlags;
-        if (stateFlags == (int)CreatureState.None && _lastSentStateFlags == (int)CreatureState.None)
-            return;
-
         Vector3 pos = transform.position;
 
         bool stateChanged = stateFlags != _lastSentStateFlags;
         bool dirChanged =
-            Mathf.Approximately(_moveDir.x, _lastSentDirX) == false ||
-            Mathf.Approximately(_moveDir.y, _lastSentDirY) == false;
+            Mathf.Approximately(_lastAimDir.x, _lastSentDirX) == false ||
+            Mathf.Approximately(_lastAimDir.y, _lastSentDirY) == false;
         bool posChanged =
             Mathf.Approximately(pos.x, _lastSentPosX) == false ||
             Mathf.Approximately(pos.y, _lastSentPosY) == false;
@@ -174,11 +219,11 @@ public class MyPlayerObject : PlayerObject
             return;
 
         _syncTimer += Time.deltaTime;
-        if (stateChanged == false && _syncTimer < _syncInterval)
+        if (stateChanged == false && dirChanged == false && _syncTimer < _syncInterval)
             return;
 
         _syncTimer = 0f;
-        SendMoveSync(pos.x, pos.y, _moveDir.x, _moveDir.y, stateFlags);
+        SendMoveSync(pos.x, pos.y, _lastAimDir.x, _lastAimDir.y, stateFlags);
     }
 
     void SendMoveSync(float posX, float posY, float dirX, float dirY, int stateFlags)

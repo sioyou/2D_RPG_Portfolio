@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static Utils;
@@ -52,7 +52,9 @@ public static class SortingLayers
 
 public static class AnimName
 {
-    public const string IDLE = "Idle";
-    public const string MOVE = "Move";
-    public const string HIT = "Hit";
+    public const string IDLE   = "Idle";
+    public const string MOVE   = "Move";
+    public const string HIT    = "Hit";
+    public const string ATTACK = "Attack";
+    public const string DIE    = "Die";
 }

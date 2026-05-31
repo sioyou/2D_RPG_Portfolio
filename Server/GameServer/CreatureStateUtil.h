@@ -32,10 +32,8 @@ namespace CreatureStateUtil
 
 	inline int32 SanitizeStateFlags(int32 clientFlags, float dirX, float dirY)
 	{
+		// dirX/dirY는 facing용. 0이 아니어도 이동 중이 아닐 수 있음(lastAimDir).
 		const bool dirMoving = (dirX != 0.f || dirY != 0.f);
-		if (HasFlag(clientFlags, Protocol::CREATURE_STATE_MOVE) == false && dirMoving)
-			clientFlags = AddFlag(clientFlags, Protocol::CREATURE_STATE_MOVE);
-
 		if (HasFlag(clientFlags, Protocol::CREATURE_STATE_MOVE) && dirMoving == false)
 			clientFlags = RemoveFlag(clientFlags, Protocol::CREATURE_STATE_MOVE);
 

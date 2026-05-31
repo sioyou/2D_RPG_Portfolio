@@ -1,6 +1,5 @@
 ﻿#pragma once
-#include "CreatureStat.h"
-#include "Enum.pb.h"
+#include "Creature.h"
 
 enum class EPlayerState : uint8
 {
@@ -9,20 +8,19 @@ enum class EPlayerState : uint8
 	InGame = 2,
 };
 
-class Player : public enable_shared_from_this<Player>
+class Player : public Creature
 {
 public:
 	~Player();
+
+	Protocol::GameObjectType GetObjectType() const override { return Protocol::OBJECT_TYPE_PLAYER; }
+	const string& GetDisplayName() const override { return _playerId; }
+
 	const string& GetPlayerId() const { return _playerId; }
-	int32 GetObjectId() const { return _objectId; }
-	int32 GetZoneId() const { return _zoneId; }
 	EPlayerState GetState() const { return _state; }
 
-	const CreatureStat& GetStat() const { return _stat; }
-	CreatureStat& GetStat() { return _stat; }
-
 	void Init(const string& playerId, int32 objectId);
-	void SetZoneId(int32 zoneId) { _zoneId = zoneId; }
+	void SetZoneId(int32 zoneId) { Creature::SetZoneId(zoneId); }
 	void SetState(EPlayerState state) { _state = state; }
 
 	void SetSession(GameSessionRef session);
@@ -32,29 +30,20 @@ public:
 	uint64 GetLoginTick() const { return _loginTick; }
 	void SetLoginTick(uint64 tick) { _loginTick = tick; }
 
-	void SetMoveDirection(float dirX, float dirY);
-	float GetMoveDirX() const { return _moveDirX; }
-	float GetMoveDirY() const { return _moveDirY; }
-
-	int32 GetStateFlags() const { return _stateFlags; }
-	void SetStateFlags(int32 stateFlags) { _stateFlags = stateFlags; }
-
 	uint64 GetLastMoveTick() const { return _lastMoveTick; }
 	void SetLastMoveTick(uint64 tick) { _lastMoveTick = tick; }
 
+	uint64 GetLastAttackTick() const { return _lastAttackTick; }
+	void SetLastAttackTick(uint64 tick) { _lastAttackTick = tick; }
+
 private:
 	string _playerId;
-	int32 _objectId = 0;
-	int32 _zoneId = 0;
 	EPlayerState _state = EPlayerState::Lobby;
 
-	CreatureStat _stat;
-
-	float _moveDirX = 0.f;
-	float _moveDirY = 0.f;
-	int32 _stateFlags = Protocol::CREATURE_STATE_NONE;
-
 	uint64 _lastMoveTick = 0;
+	uint64 _lastAttackTick = 0;
 	uint64 _loginTick = 0;
 	weak_ptr<class GameSession> _session;
 };
+
+using PlayerRef = shared_ptr<Player>;

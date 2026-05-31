@@ -1,10 +1,20 @@
 ﻿#include "pch.h"
 #include "GameProtocolUtil.h"
-#include "Player.h"
-#include "Monster.h"
 
 namespace
 {
+	void FillFacing(float dirX, float dirY, Protocol::ObjectInfo* info)
+	{
+		if (dirX == 0.f && dirY == 0.f)
+		{
+			dirX = 1.f;
+			dirY = 0.f;
+		}
+
+		info->set_dirx(dirX);
+		info->set_diry(dirY);
+	}
+
 	void FillStat(const CreatureStat& stat, int32 stateFlags, Protocol::ObjectInfo* info)
 	{
 		info->set_level(stat.GetLevel());
@@ -16,26 +26,16 @@ namespace
 	}
 }
 
-void GameProtocolUtil::FillObjectInfo(const PlayerRef& player, Protocol::ObjectInfo* info)
+void GameProtocolUtil::FillObjectInfo(const CreatureRef& creature, Protocol::ObjectInfo* info)
 {
-	if (player == nullptr || info == nullptr)
+	if (creature == nullptr || info == nullptr)
 		return;
 
-	info->set_objectid(player->GetObjectId());
-	info->set_objecttype(Protocol::OBJECT_TYPE_PLAYER);
-	info->set_name(player->GetPlayerId());
-	FillStat(player->GetStat(), player->GetStateFlags(), info);
-}
-
-void GameProtocolUtil::FillObjectInfo(const MonsterRef& monster, Protocol::ObjectInfo* info)
-{
-	if (monster == nullptr || info == nullptr)
-		return;
-
-	info->set_objectid(monster->GetObjectId());
-	info->set_objecttype(Protocol::OBJECT_TYPE_MONSTER);
-	info->set_name(monster->GetName());
-	FillStat(monster->GetStat(), monster->GetStateFlags(), info);
+	info->set_objectid(creature->GetObjectId());
+	info->set_objecttype(creature->GetObjectType());
+	info->set_name(creature->GetDisplayName());
+	FillStat(creature->GetStat(), creature->GetStateFlags(), info);
+	FillFacing(creature->GetMoveDirX(), creature->GetMoveDirY(), info);
 }
 
 void GameProtocolUtil::FillPlayerSpawn(const PlayerRef& player, Protocol::SpawnEntry* entry)
@@ -43,7 +43,7 @@ void GameProtocolUtil::FillPlayerSpawn(const PlayerRef& player, Protocol::SpawnE
 	if (player == nullptr || entry == nullptr)
 		return;
 
-	FillObjectInfo(player, entry->mutable_player());
+	FillObjectInfo(static_pointer_cast<Creature>(player), entry->mutable_player());
 }
 
 void GameProtocolUtil::FillMonsterSpawn(const MonsterRef& monster, Protocol::SpawnEntry* entry)
@@ -52,6 +52,24 @@ void GameProtocolUtil::FillMonsterSpawn(const MonsterRef& monster, Protocol::Spa
 		return;
 
 	Protocol::MonsterInfo* monsterInfo = entry->mutable_monster();
-	FillObjectInfo(monster, monsterInfo->mutable_objectinfo());
+	FillObjectInfo(static_pointer_cast<Creature>(monster), monsterInfo->mutable_objectinfo());
 	monsterInfo->set_monstertype(monster->GetTemplateId());
+}
+
+void GameProtocolUtil::FillSpawnEntry(const CreatureRef& creature, Protocol::SpawnEntry* entry)
+{
+	if (creature == nullptr || entry == nullptr)
+		return;
+
+	switch (creature->GetObjectType())
+	{
+	case Protocol::OBJECT_TYPE_PLAYER:
+		FillPlayerSpawn(static_pointer_cast<Player>(creature), entry);
+		break;
+	case Protocol::OBJECT_TYPE_MONSTER:
+		FillMonsterSpawn(static_pointer_cast<Monster>(creature), entry);
+		break;
+	default:
+		break;
+	}
 }
