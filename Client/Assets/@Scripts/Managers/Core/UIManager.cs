@@ -83,9 +83,10 @@ public class UIManager
         if (string.IsNullOrEmpty(name))
             name = typeof(T).Name;
 
-        GameObject go = Managers.Resource.Instantiate($"{name}");
-        if (parent != null)
-            go.transform.SetParent(parent);
+        // parent에 Instantiate하면 프리팹 RectTransform 로컬 위치/스케일이 유지됨
+        GameObject go = Managers.Resource.Instantiate($"{name}", parent);
+        if (go == null)
+            return null;
 
         Canvas canvas = go.GetOrAddComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;

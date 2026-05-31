@@ -5,8 +5,6 @@ public class BaseObject : MonoBehaviour
 {
     public ObjectInfo Info { get; private set; }
 
-    public float MoveSpeed = 5f;
-
     public bool IsMyPlayer =>
         Info != null && Info.ObjectId == Managers.Game.MyObjectId;
 

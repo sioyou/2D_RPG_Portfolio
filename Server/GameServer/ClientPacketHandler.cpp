@@ -173,7 +173,7 @@ bool Handle_C_S_ATTACK(PacketSessionRef& session, Protocol::C_S_ATTACK& pkt)
 	attackPkt.set_dirx(pkt.dirx());
 	attackPkt.set_diry(pkt.diry());
 	attackPkt.set_targetid(hitTargetId);
-	attackPkt.set_damage(damageDealt);
+	attackPkt.set_targethp(hitMonster->GetStat().GetHp());
 	attackPkt.set_targetdirx(targetDirX);
 	attackPkt.set_targetdiry(targetDirY);
 

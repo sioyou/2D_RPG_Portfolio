@@ -96,7 +96,7 @@ public static class PacketHandler
                 faceDirX = attacker.transform.position.x - target.transform.position.x;
         }
         
-        target.ApplyDamaged(faceDirX);
+        target.ApplyDamaged(faceDirX, pkt.TargetHp);
     }
 
     public static void S_C_DIEHandler(PacketSession session, IMessage packet)

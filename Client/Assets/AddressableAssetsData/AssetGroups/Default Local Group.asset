@@ -27,6 +27,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c573a56b1774a440b2d638523260620
+    m_Address: UI_WorldHpBar
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6d5566bcd1f6c734286cbdb48d6daf0b
     m_Address: WoodMonster
     m_ReadOnly: 0

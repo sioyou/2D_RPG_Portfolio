@@ -6,14 +6,19 @@ public class CreatureObject : BaseObject
 {
     const float DieFallbackDuration = 0.5f;
 
-    Coroutine _dieRoutine;
-    MoveComponent _move;
-    StateComponent _state;
-    AnimComponent _anim;
+    private Coroutine _dieRoutine;
+
+    private MoveComponent _move;
+    private StateComponent _state;
+    private AnimComponent _anim;
+    private StatComponent _stat;
+
+    private UI_WorldHpBar _worldHpBar;
 
     protected MoveComponent Move => _move;
     protected StateComponent State => _state;
     protected AnimComponent Anim => _anim;
+    protected StatComponent Stat => _stat;
 
     protected override void Awake()
     {
@@ -23,11 +28,33 @@ public class CreatureObject : BaseObject
         _state.OnStateFlagsChanged -= OnStateFlagsChanged;
         _state.OnStateFlagsChanged += OnStateFlagsChanged;
         _anim = Utils.GetOrAddComponent<AnimComponent>(gameObject);
+        _stat = Utils.GetOrAddComponent<StatComponent>(gameObject);
+        _stat.OnStatChanged -= OnStatChanged;
+        _stat.OnStatChanged += OnStatChanged;
+
+        _worldHpBar = Managers.UI.MakeWorldSpaceUI<UI_WorldHpBar>(gameObject.transform, "UI_WorldHpBar");
     }
 
     private void OnStateFlagsChanged(int state)
     {
         _anim?.PlayAnim(state);
+    }
+
+    void OnStatChanged(StatChangeFlags flags)
+    {
+        if ((flags & StatChangeFlags.Hp) != 0)
+            RefreshWorldHpBar();
+
+        if ((flags & StatChangeFlags.MaxHp) != 0)
+            RefreshWorldHpBar();
+    }
+
+    void RefreshWorldHpBar()
+    {
+        if (_worldHpBar == null || _stat == null)
+            return;
+
+        _worldHpBar.SetHpValue(_stat.HpRatio);
     }
 
     public bool Interpolate
@@ -49,6 +76,7 @@ public class CreatureObject : BaseObject
             _move.Interpolate = !IsMyPlayer;
 
         SyncDestinationToCurrent();
+        _stat?.ApplyFrom(info);
         ApplyStateFlags(info.StateFlags);
         ApplySpawnFacing(info.DirX, info.DirY);
     }
@@ -83,10 +111,13 @@ public class CreatureObject : BaseObject
         Invoke(nameof(ClearAttackState), 0.5f);
     }
 
-    public virtual void ApplyDamaged(float faceDirX)
+    public virtual void ApplyDamaged(float faceDirX, int targetHp = -1)
     {
         if (State != null && State.HasState(CreatureState.Dead))
             return;
+
+        if (targetHp >= 0)
+            _stat?.SetHpFromServer(targetHp);
 
         ApplyFacing(faceDirX);
         _state?.AddState(CreatureState.Damaged);
@@ -131,6 +162,9 @@ public class CreatureObject : BaseObject
 
     void OnDestroy()
     {
+        if (_stat != null)
+            _stat.OnStatChanged -= OnStatChanged;
+
         StopDieRoutine();
     }
 

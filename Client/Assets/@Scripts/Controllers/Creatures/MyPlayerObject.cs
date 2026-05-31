@@ -114,7 +114,8 @@ public class MyPlayerObject : PlayerObject
 
     void UpdateMove()
     {
-        AddWorldDelta(_moveDir * (MoveSpeed * Time.deltaTime));
+        float moveSpeed = Stat != null ? Stat.MoveSpeed : 0f;
+        AddWorldDelta(_moveDir * (moveSpeed * Time.deltaTime));
     }
 
     void UpdateAttack()

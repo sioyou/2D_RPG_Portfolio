@@ -76,7 +76,7 @@ message S_C_ATTACK
 	float dirX = 2;
 	float dirY = 3;
 	int32 targetId = 4;
-	int32 damage = 5;
+	int32 targetHp = 5;
 	float targetDirX = 6;
 	float targetDirY = 7;
 }
