@@ -3,10 +3,10 @@
 #include "GameSession.h"
 #include "GameProtocolUtil.h"
 #include "CreatureManager.h"
+#include "Player.h"
 
 namespace 
 {
-	constexpr float MOVE_SPEED = 5.f;
 	constexpr float MAX_SYNC_INTERVAL_SEC = 0.15f;
 	constexpr float MOVE_TOLERANCE = 0.35f;
 }
@@ -107,7 +107,8 @@ void Zone::ValidateClientPosition(PlayerRef player, float clientX, float clientY
 	if (deltaSeconds < 0.001f)
 		deltaSeconds = MAX_SYNC_INTERVAL_SEC;
 
-	const float maxDistance = MOVE_SPEED * deltaSeconds + MOVE_TOLERANCE;
+	const float moveSpeed = player->GetMoveSpeed();
+	const float maxDistance = moveSpeed * deltaSeconds + MOVE_TOLERANCE;
 
 	const float dx = clientX - serverX;
 	const float dy = clientY - serverY;

@@ -1,10 +1,11 @@
-﻿#include "pch.h"
+#include "pch.h"
 
 #include "ThreadManager.h"
 #include "Service.h"
 #include "GameSession.h"
 #include "ClientPacketHandler.h"
 #include "ZoneManager.h"
+#include "Data/DataManager.h"
 
 enum
 {
@@ -27,6 +28,13 @@ void DoWorkerJob(ServerServiceRef& service)
 int main()
 {
 	ClientPacketHandler::Init();
+
+	if (GDataManager.Init("Data") == false)
+	{
+		cout << "[GameServer] Failed to load game data." << endl;
+		return -1;
+	}
+
 	GZoneManager.Init();
 
 	ServerServiceRef service = MakeShared<ServerService>(

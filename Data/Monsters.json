@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Frog",
+    "maxHp": 50,
+    "moveSpeed": 3.0,
+    "attackDamage": 5,
+    "attackRange": 1.0
+  },
+  {
+    "id": 2,
+    "name": "Wood",
+    "maxHp": 50,
+    "moveSpeed": 2.0,
+    "attackDamage": 8,
+    "attackRange": 1.2
+  }
+]

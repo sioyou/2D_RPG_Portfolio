@@ -1,8 +1,9 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "ZoneManager.h"
 #include "ClientPacketHandler.h"
 #include "GameProtocolUtil.h"
 #include "CreatureManager.h"
+#include "Data/DataManager.h"
 
 ZoneManager GZoneManager;
 
@@ -116,8 +117,15 @@ void ZoneManager::InitDefaultZone(ZoneRef zone)
 		return;
 
 	const int32 zoneId = zone->GetZoneId();
+	const std::vector<SpawnEntryData>& spawns = GDataManager.GetZoneSpawns(zoneId);
 
-	GCreatureManager.SpawnMonster(zoneId, Protocol::MONSTER_TYPE_FROG, 1, -2.f, 0.f);
-	GCreatureManager.SpawnMonster(zoneId, Protocol::MONSTER_TYPE_FROG, 1, 2.f, 1.f);
-	GCreatureManager.SpawnMonster(zoneId, Protocol::MONSTER_TYPE_WOOD, 1, 5.f, -1.f);
+	for (const SpawnEntryData& entry : spawns)
+	{
+		GCreatureManager.SpawnMonster(
+			zoneId,
+			static_cast<Protocol::MonsterType>(entry.monsterType),
+			entry.level,
+			entry.posX,
+			entry.posY);
+	}
 }

@@ -122,16 +122,15 @@ bool Handle_C_S_ATTACK(PacketSessionRef& session, Protocol::C_S_ATTACK& pkt)
 	if (zone == nullptr)
 		return false;
 
-	constexpr uint64 ATTACK_COOLDOWN_MS = 500;
 	const uint64 now = ::GetTickCount64();
-	if (now - attacker->GetLastAttackTick() < ATTACK_COOLDOWN_MS)
+	if (now - attacker->GetLastAttackTick() < attacker->GetAttackCooldownMs())
 		return true;
 
 	attacker->SetLastAttackTick(now);
 	attacker->SetMoveDirection(pkt.dirx(), pkt.diry());
 
-	constexpr float ATTACK_RANGE = 1.5f;
-	constexpr int32 ATTACK_DAMAGE = 10;
+	const float attackRange = attacker->GetAttackRange();
+	const int32 attackDamage = attacker->GetAttackDamage();
 
 	const float ax = attacker->GetStat().GetPosX();
 	const float ay = attacker->GetStat().GetPosY();
@@ -153,10 +152,10 @@ bool Handle_C_S_ATTACK(PacketSessionRef& session, Protocol::C_S_ATTACK& pkt)
 		const float my = monster->GetStat().GetPosY();
 		const float dx = mx - ax;
 		const float dy = my - ay;
-		if (dx * dx + dy * dy > ATTACK_RANGE * ATTACK_RANGE)
+		if (dx * dx + dy * dy > attackRange * attackRange)
 			return;
 
-		damageDealt = monster->TakeDamage(ATTACK_DAMAGE);
+		damageDealt = monster->TakeDamage(attackDamage);
 		if (damageDealt <= 0)
 			return;
 

@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "name": "Player",
+    "level": 1,
+    "maxHp": 100,
+    "moveSpeed": 5.0,
+    "attackDamage": 10,
+    "attackRange": 1.5,
+    "attackCooldownMs": 500
+  }
+]

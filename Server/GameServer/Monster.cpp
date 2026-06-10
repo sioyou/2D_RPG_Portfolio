@@ -1,5 +1,6 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Monster.h"
+#include "Data/DataManager.h"
 
 void Monster::Init(int32 objectId, int32 zoneId, Protocol::MonsterType monsterType, int32 level)
 {
@@ -9,19 +10,18 @@ void Monster::Init(int32 objectId, int32 zoneId, Protocol::MonsterType monsterTy
 
 	CreatureStat& stat = GetStat();
 	stat.SetLevel(level);
-	// todo : creatureType에 따른 데이터
-	stat.SetMaxHp(50);
-	stat.SetHp(50);
-	switch (monsterType)
+
+	const MonsterData* data = GDataManager.GetMonster(monsterType);
+	if (data != nullptr)
 	{
-	case Protocol::MONSTER_TYPE_FROG:
-		_name = "Frog";
-		break;
-	case Protocol::MONSTER_TYPE_WOOD:
-		_name = "Wood";
-		break;
-	default:
+		stat.SetMaxHp(data->maxHp);
+		stat.SetHp(data->maxHp);
+		_name = data->name;
+	}
+	else
+	{
+		stat.SetMaxHp(50);
+		stat.SetHp(50);
 		_name = "Monster";
-		break;
 	}
 }

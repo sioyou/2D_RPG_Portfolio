@@ -104,6 +104,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /I /E "$(SolutionDir)..\Data" "$(OutDir)Data\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -123,6 +126,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /I /E "$(SolutionDir)..\Data" "$(OutDir)Data\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -138,6 +144,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /I /E "$(SolutionDir)..\Data" "$(OutDir)Data\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -157,6 +166,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /I /E "$(SolutionDir)..\Data" "$(OutDir)Data\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ClientPacketHandler.cpp" />
@@ -178,6 +190,7 @@
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="CreatureStat.cpp" />
     <ClCompile Include="CreatureManager.cpp" />
+    <ClCompile Include="Data\DataManager.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="Protocol.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -213,6 +226,8 @@
     <ClInclude Include="CreatureStat.h" />
     <ClInclude Include="CreatureStateUtil.h" />
     <ClInclude Include="CreatureManager.h" />
+    <ClInclude Include="Data\DataManager.h" />
+    <ClInclude Include="Data\DataTypes.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Protocol.pb.h" />
