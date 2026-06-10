@@ -17,6 +17,8 @@ public:
 	PlayerRef FindByObjectId(int32 objectId);
 	PlayerRef FindBySession(GameSessionRef session);
 
+	void UpdateSession(PlayerRef player, GameSessionRef newSession);
+
 	bool IsOnline(const string& playerId);
 	int32 GetOnlineCount();
 

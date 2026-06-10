@@ -3,11 +3,13 @@
 #include "GameSession.h"
 #include "GameProtocolUtil.h"
 #include "CreatureManager.h"
+#include "PlayerManager.h"
 #include "Player.h"
 
 namespace 
 {
 	constexpr float MAX_SYNC_INTERVAL_SEC = 0.15f;
+	constexpr float MAX_ALLOWED_DELTA_SEC = 0.5f;
 	constexpr float MOVE_TOLERANCE = 0.35f;
 }
 
@@ -38,7 +40,22 @@ bool Zone::EnterPlayer(PlayerRef player)
 
 	auto it = _players.find(player->GetObjectId());
 	if (it != _players.end())
-		return it->second == player;
+	{
+		if (it->second != player)
+			return false;
+
+		GameSessionRef oldSession = player->GetSession();
+		if (oldSession != session)
+		{
+			if (oldSession != nullptr)
+				_sessions.erase(oldSession);
+
+			_sessions.insert(session);
+			GPlayerManager.UpdateSession(player, session);
+		}
+
+		return true;
+	}
 
 	player->SetZoneId(_zoneId);
 	_players[player->GetObjectId()] = player;
@@ -102,8 +119,8 @@ void Zone::ValidateClientPosition(PlayerRef player, float clientX, float clientY
 	if (lastTick > 0 && now > lastTick)
 		deltaSeconds = static_cast<float>(now - lastTick) / 1000.f;
 
-	if (deltaSeconds > MAX_SYNC_INTERVAL_SEC)
-		deltaSeconds = MAX_SYNC_INTERVAL_SEC;
+	if (deltaSeconds > MAX_ALLOWED_DELTA_SEC)
+		deltaSeconds = MAX_ALLOWED_DELTA_SEC;
 	if (deltaSeconds < 0.001f)
 		deltaSeconds = MAX_SYNC_INTERVAL_SEC;
 

@@ -101,6 +101,24 @@ PlayerRef PlayerManager::FindBySession(GameSessionRef session)
 	return it->second;
 }
 
+void PlayerManager::UpdateSession(PlayerRef player, GameSessionRef newSession)
+{
+	if (player == nullptr || newSession == nullptr)
+		return;
+
+	WRITE_LOCK;
+
+	GameSessionRef oldSession = player->GetSession();
+	if (oldSession == newSession)
+		return;
+
+	if (oldSession != nullptr)
+		_playersBySession.erase(oldSession.get());
+
+	player->SetSession(newSession);
+	_playersBySession[newSession.get()] = player;
+}
+
 bool PlayerManager::IsOnline(const string& playerId)
 {
 	return FindByPlayerId(playerId) != nullptr;

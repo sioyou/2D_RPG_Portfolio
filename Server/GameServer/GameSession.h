@@ -1,18 +1,20 @@
-#pragma once
+﻿#pragma once
 #include "Session.h"
+#include "JobQueue.h"
 
 class GameSession : public PacketSession
 {
 public:
-	~GameSession()
-	{
-		cout << "~GameSession" << endl;
-	}
+	GameSession();
+	~GameSession() override;
 
 	GameSessionRef GetGameSessionRef();
 
-	virtual void OnConnected() override;
-	virtual void OnDisconnected() override;
-	virtual void OnRecvPacket(BYTE* buffer, int32 len) override;
-	virtual void OnSend(int32 len) override;
+	void OnConnected() override;
+	void OnDisconnected() override;
+	void OnRecvPacket(BYTE* buffer, int32 len) override;
+	void OnSend(int32 len) override;
+
+private:
+	JobQueueRef _packetQueue;
 };
