@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Define;
 
 public class TitleScene : BaseScene
 {
@@ -21,7 +22,10 @@ public class TitleScene : BaseScene
 
         Managers.Init();
 
-        Managers.Resource.LoadAllAsync<Object>("Preload", OnPreloadComplete);
+        Managers.Resource.LoadAllAsync<Object>(AddressableLabels.Preload, false, () =>
+        {
+            Managers.Resource.LoadAllAsync<Object>(AddressableLabels.ScenePreload(Define.EScene.TitleScene), true, OnPreloadComplete);
+        });
     }
 
     void PreserveEventSystem()

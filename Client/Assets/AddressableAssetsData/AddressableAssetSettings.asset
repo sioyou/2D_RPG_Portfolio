@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetSettings
-  m_DefaultGroup: 00654c8f2d19dfe4b98f5e775268d615
+  m_DefaultGroup: 8cefbab1a42bb1549b190aa9dc81c4c6
   m_currentHash:
     serializedVersion: 2
     Hash: e660c44b20b941b8d2a762ad08ee5bfe
@@ -59,7 +59,9 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
-  - {fileID: 11400000, guid: d318c54ae8f956149a0aa94d547148f5, type: 2}
+  - {fileID: 11400000, guid: 8cefbab1a42bb1549b190aa9dc81c4c6, type: 2}
+  - {fileID: 11400000, guid: b7c8d9e0f1a234567890abcd12ef3456, type: 2}
+  - {fileID: 11400000, guid: e0f1a234567890abcd12ef3456789012, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -100,6 +102,8 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - Preload
+    - TitleScenePreload
+    - GameScenePreload
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 018d182dc0e83214abda1175cc69ea22, type: 2}

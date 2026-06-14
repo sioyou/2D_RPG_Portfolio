@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: TitleScene
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: TitleScene
+  m_GUID: b7c8d9e0f1a234567890abcd12ef3456
+  m_SerializeEntries:
+  - m_GUID: 4094012eb3f1a704993b0bb0c2afaefc
+    m_Address: UI_LoginPopup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TitleScenePreload
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 7ecc330f9e3e59c469ebd8e78d9257bc, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: c8d9e0f1a234567890abcd12ef345678, type: 2}
+    - {fileID: 11400000, guid: d9e0f1a234567890abcd12ef34567890, type: 2}

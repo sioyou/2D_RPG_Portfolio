@@ -2,40 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
 public class ResourceManager
 {
-    // 실제 로드한 리소스.
-    private Dictionary<string, UnityEngine.Object> _resources = new Dictionary<string, UnityEngine.Object>();
+    Dictionary<string, Object> _resources = new Dictionary<string, Object>();
+    Dictionary<string, Object> _sceneResources = new Dictionary<string, Object>();
+    List<AsyncOperationHandle> _globalHandles = new List<AsyncOperationHandle>();
+    List<AsyncOperationHandle> _sceneHandles = new List<AsyncOperationHandle>();
 
     #region 리소스 로드
     public bool CheckResource<T>(string key) where T : Object
     {
-        if (_resources.TryGetValue(key, out Object resource))
-        {
+        if (TryGetCached(key, out _))
             return true;
-        }
 
         if (typeof(T) == typeof(Sprite))
         {
             key = key + ".sprite";
-            if (_resources.TryGetValue(key, out Object temp))
-            {
+            if (TryGetCached(key, out _))
                 return true;
-            }
         }
 
         return false;
     }
-    
+
     public T Load<T>(string key) where T : Object
     {
-        if (_resources.TryGetValue(key, out Object resource))
-        {
+        if (TryGetCached(key, out Object resource))
             return resource as T;
-        }
+
         return null;
+    }
+
+    bool TryGetCached(string key, out Object resource)
+    {
+        if (_resources.TryGetValue(key, out resource))
+            return true;
+
+        if (_sceneResources.TryGetValue(key, out resource))
+            return true;
+
+        resource = null;
+        return false;
     }
 
     public GameObject Instantiate(string key, Transform parent = null, bool pooling = false)
@@ -68,36 +78,42 @@ public class ResourceManager
     }
 
     #endregion
- 
+
     #region 어드레서블
 
-    public void LoadAsync<T>(string key, Action<T> callback = null) where T : UnityEngine.Object
+    public void LoadAsync<T>(string key, bool isScene, Action<T> callback = null) where T : Object
     {
-        //스프라이트인 경우 하위객체의 찐이름으로 로드하면 스프라이트로 로딩이 됌
+        Dictionary<string, Object> cache = isScene ? _sceneResources : _resources;
+
+        if (cache.TryGetValue(key, out Object cached))
+        {
+            callback?.Invoke(cached as T);
+            return;
+        }
+
         string loadKey = key;
         if (typeof(T) == typeof(Sprite))
-        {
             loadKey = $"{key}[{key}]";
-        }
-        
-        var asyncOperation = Addressables.LoadAssetAsync<T>(loadKey);
+
+        AsyncOperationHandle<T> asyncOperation = Addressables.LoadAssetAsync<T>(loadKey);
+        List<AsyncOperationHandle> handles = isScene ? _sceneHandles : _globalHandles;
+        handles.Add(asyncOperation);
+
         asyncOperation.Completed += (op) =>
         {
-            // 캐시 확인.
-            if (_resources.TryGetValue(key, out Object resource))
-            {
-                callback?.Invoke(op.Result);
-                return;
-            }
+            if (cache.ContainsKey(key) == false)
+                cache.Add(key, op.Result);
 
-            _resources.Add(key, op.Result);
             callback?.Invoke(op.Result);
         };
     }
 
-    public void LoadAllAsync<T>(string label, Action onCompleteCallback) where T : UnityEngine.Object
+    public void LoadAllAsync<T>(string label, bool isScene, Action onCompleteCallback) where T : Object
     {
         var opHandle = Addressables.LoadResourceLocationsAsync(label, typeof(T));
+        List<AsyncOperationHandle> handles = isScene ? _sceneHandles : _globalHandles;
+        handles.Add(opHandle);
+
         opHandle.Completed += (op) =>
         {
             int loadCount = 0;
@@ -113,7 +129,7 @@ public class ResourceManager
             {
                 if (result.ResourceType == typeof(Texture2D) || result.ResourceType == typeof(Sprite))
                 {
-                    LoadAsync<Sprite>(result.PrimaryKey, (obj) =>
+                    LoadAsync<Sprite>(result.PrimaryKey, isScene, (obj) =>
                     {
                         loadCount++;
                         if (loadCount >= totalCount)
@@ -122,7 +138,7 @@ public class ResourceManager
                 }
                 else
                 {
-                    LoadAsync<T>(result.PrimaryKey, (obj) =>
+                    LoadAsync<T>(result.PrimaryKey, isScene, (obj) =>
                     {
                         loadCount++;
                         if (loadCount >= totalCount)
@@ -131,6 +147,18 @@ public class ResourceManager
                 }
             }
         };
+    }
+
+    public void ClearSceneResources()
+    {
+        foreach (AsyncOperationHandle handle in _sceneHandles)
+        {
+            if (handle.IsValid())
+                Addressables.Release(handle);
+        }
+
+        _sceneHandles.Clear();
+        _sceneResources.Clear();
     }
 
     #endregion

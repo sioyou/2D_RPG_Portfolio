@@ -10,56 +10,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: GameScene
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: Default Local Group
-  m_GUID: 00654c8f2d19dfe4b98f5e775268d615
+  m_GroupName: GameScene
+  m_GUID: e0f1a234567890abcd12ef3456789012
   m_SerializeEntries:
-  - m_GUID: 4094012eb3f1a704993b0bb0c2afaefc
-    m_Address: UI_LoginPopup
+  - m_GUID: d69e67e8b9c862f42a18b68ce09069c5
+    m_Address: Player
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Preload
+    - GameScenePreload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5e4732511eb455c46af69451aefab63d
     m_Address: FrogMonster
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6c573a56b1774a440b2d638523260620
-    m_Address: UI_WorldHpBar
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
+    - GameScenePreload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6d5566bcd1f6c734286cbdb48d6daf0b
     m_Address: WoodMonster
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Preload
+    - GameScenePreload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 74cc5ae153047fd4f87cfefa5393bb88
-    m_Address: EventSystem
+  - m_GUID: 6c573a56b1774a440b2d638523260620
+    m_Address: UI_WorldHpBar
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a5c49702a2e749fda32eb8c5fd0bae78
-    m_Address: InputSystem_Actions
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d69e67e8b9c862f42a18b68ce09069c5
-    m_Address: Player
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
+    - GameScenePreload
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7ecc330f9e3e59c469ebd8e78d9257bc, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 998fda3561685074381d9ad9a337a31a, type: 2}
-    - {fileID: 11400000, guid: 1c3b7cedd430dd14f8be2cc4a4bd1b19, type: 2}
+    - {fileID: 11400000, guid: e0f1a234567890abcd12ef3456789013, type: 2}
+    - {fileID: 11400000, guid: e0f1a234567890abcd12ef3456789014, type: 2}

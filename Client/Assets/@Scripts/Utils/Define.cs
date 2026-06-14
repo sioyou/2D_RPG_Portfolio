@@ -15,6 +15,16 @@ public class Define
         GameScene,
     }
 
+    public static class AddressableLabels
+    {
+        public const string Preload = "Preload";
+
+        public static string ScenePreload(EScene scene)
+        {
+            return $"{System.Enum.GetName(typeof(EScene), scene)}Preload";
+        }
+    }
+
     public enum ESound
     {
         Bgm,

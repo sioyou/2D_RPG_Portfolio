@@ -8,13 +8,18 @@ public class SceneManagerEx
     public void LoadScene(Define.EScene type, Transform parents = null)
     {
         Managers.Clear();
-        SceneManager.LoadScene(GetSceneName(type));
+        Managers.Resource.ClearSceneResources();
+
+        string preloadLabel = Define.AddressableLabels.ScenePreload(type);
+        Managers.Resource.LoadAllAsync<Object>(preloadLabel, true, () =>
+        {
+            SceneManager.LoadScene(GetSceneName(type));
+        });
     }
 
-    private string GetSceneName(Define.EScene type)
+    string GetSceneName(Define.EScene type)
     {
-        string name = System.Enum.GetName(typeof(Define.EScene), type);
-        return name;
+        return System.Enum.GetName(typeof(Define.EScene), type);
     }
 
     public void Clear()
