@@ -1,19 +1,22 @@
 ﻿using Protocol;
 using UnityEngine;
+using static Define;
 
 public class MyPlayerObject : PlayerObject
 {
     const float MoveDeadzoneSqr = 0.02f * 0.02f;
     const float AttackCooldownTime = 0.5f;
 
-    [SerializeField] float _correctionThreshold = 0.5f;
-    [SerializeField] float _syncInterval = 0.1f;
+    [SerializeField] float _syncInterval = MoveValidation.MaxSyncIntervalSec;
 
     InputComponent _input;
     Vector2 _moveDir;
     Vector2 _lastAimDir = Vector2.right;
     float _syncTimer;
     float _attackCooldown;
+
+    Vector2 _serverPos;
+    bool _hasServerPos;
 
     int _lastSentStateFlags = -1;
     float _lastSentPosX;
@@ -31,6 +34,9 @@ public class MyPlayerObject : PlayerObject
             _lastAimDir = new Vector2(info.DirX, info.DirY).normalized;
         else
             _lastAimDir = Vector2.right;
+
+        _serverPos = new Vector2(info.PosX, info.PosY);
+        _hasServerPos = true;
     }
 
     protected override void Start()
@@ -114,8 +120,30 @@ public class MyPlayerObject : PlayerObject
 
     void UpdateMove()
     {
-        float moveSpeed = Stat != null ? Stat.MoveSpeed : 0f;
-        AddWorldDelta(_moveDir * (moveSpeed * Time.deltaTime));
+        if (_hasServerPos)
+        {
+            Vector2 pos = transform.position;
+            float moveSpeed = Stat != null ? Stat.MoveSpeed : 0f;
+            float maxDistance = MoveValidation.CalcMaxDistance(moveSpeed, _syncInterval + MoveValidation.MaxAllowedDeltaSec);
+            float cheatRejectDistance = MoveValidation.CalcCheatRejectDistance(maxDistance);
+
+            if (Vector2.Distance(pos, _serverPos) > cheatRejectDistance)
+            {
+                Interpolate = false;
+                SetPosition(new Vector3(_serverPos.x, _serverPos.y, transform.position.z));
+                SyncDestinationToCurrent();
+            }
+        }
+
+        float moveSpeedDelta = Stat != null ? Stat.MoveSpeed : 0f;
+        Vector2 delta = _moveDir * (moveSpeedDelta * Time.deltaTime);
+        Vector2 curPos = transform.position;
+
+        Vector2 resolved = Managers.Map.IsReady
+            ? Managers.Map.ResolveMove(curPos, curPos + delta, CREATURE_COLLISION_RADIUS)
+            : curPos;
+
+        AddWorldDelta(resolved - curPos);
     }
 
     void UpdateAttack()
@@ -176,12 +204,23 @@ public class MyPlayerObject : PlayerObject
 
     public override void ApplyDestPosition(Vector2 pos)
     {
+        _serverPos = pos;
+        _hasServerPos = true;
+
         Vector3 serverPos = new Vector3(pos.x, pos.y, transform.position.z);
-        if (Vector3.Distance(transform.position, serverPos) <= _correctionThreshold)
+        float dist = Vector3.Distance(transform.position, serverPos);
+        if (dist <= 0.05f)
             return;
 
-        Interpolate = true;
-        SetDestination(pos.x, pos.y);
+        if (dist <= MoveValidation.ServerSnapThreshold)
+            return;
+
+        Interpolate = false;
+        SetPosition(serverPos);
+        SyncDestinationToCurrent();
+
+        _lastSentPosX = pos.x;
+        _lastSentPosY = pos.y;
     }
 
     public override void ApplyStateFlags(int stateFlags)
@@ -224,7 +263,41 @@ public class MyPlayerObject : PlayerObject
             return;
 
         _syncTimer = 0f;
-        SendMoveSync(pos.x, pos.y, _lastAimDir.x, _lastAimDir.y, stateFlags);
+
+        float sendPosX = pos.x;
+        float sendPosY = pos.y;
+        ClampSendPosition(ref sendPosX, ref sendPosY);
+
+        SendMoveSync(sendPosX, sendPosY, _lastAimDir.x, _lastAimDir.y, stateFlags);
+    }
+
+    void ClampSendPosition(ref float posX, ref float posY)
+    {
+        if (_hasServerPos == false)
+            return;
+
+        float moveSpeed = Stat != null ? Stat.MoveSpeed : 0f;
+        float maxDistance = MoveValidation.CalcMaxDistance(moveSpeed, _syncInterval + MoveValidation.MaxSyncIntervalSec);
+
+        float dx = posX - _serverPos.x;
+        float dy = posY - _serverPos.y;
+        float distanceSq = dx * dx + dy * dy;
+        float maxDistanceSq = maxDistance * maxDistance;
+
+        if (distanceSq > maxDistanceSq && distanceSq > 0.0001f)
+        {
+            float distance = Mathf.Sqrt(distanceSq);
+            float ratio = maxDistance / distance;
+            posX = _serverPos.x + dx * ratio;
+            posY = _serverPos.y + dy * ratio;
+        }
+
+        if (Managers.Map.IsReady)
+        {
+            Vector2 resolved = Managers.Map.ResolveMove(_serverPos, new Vector2(posX, posY), CREATURE_COLLISION_RADIUS);
+            posX = resolved.x;
+            posY = resolved.y;
+        }
     }
 
     void SendMoveSync(float posX, float posY, float dirX, float dirY, int stateFlags)

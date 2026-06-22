@@ -7,16 +7,12 @@
 #include "CreatureManager.h"
 #include "PlayerManager.h"
 #include "Player.h"
-
-namespace
-{
-	constexpr float MAX_SYNC_INTERVAL_SEC = 0.15f;
-	constexpr float MAX_ALLOWED_DELTA_SEC = 0.5f;
-	constexpr float MOVE_TOLERANCE = 0.35f;
-}
+#include "Data/DataManager.h"
+#include "MoveValidation.h"
 
 Room::Room(int32 roomId, const RoomData& config)
 	: _roomId(roomId)
+	, _mapId(config.mapId > 0 ? config.mapId : 1)
 	, _originX(config.originX)
 	, _originY(config.originY)
 	, _zoneSize(config.zoneSize > 0.f ? config.zoneSize : 10.f)
@@ -31,6 +27,12 @@ Room::Room(int32 roomId, const RoomData& config)
 
 	for (int32 i = 0; i < zoneCount; ++i)
 		_zones.push_back(make_shared<Zone>(i));
+
+	const MapCollisionData* mapData = GDataManager.GetMapCollision(_mapId);
+	if (mapData != nullptr)
+		_mapCollision = MapCollision::FromData(*mapData);
+	else
+		cout << "[Room] Missing map collision data. roomId=" << _roomId << " mapId=" << _mapId << endl;
 }
 
 int32 Room::WorldToZoneIndex(float worldX, float worldY) const
@@ -409,33 +411,45 @@ void Room::ValidateClientPosition(PlayerRef player, float clientX, float clientY
 	uint64 lastTick = player->GetLastMoveTick();
 	player->SetLastMoveTick(now);
 
-	float deltaSeconds = MAX_SYNC_INTERVAL_SEC;
+	float deltaSeconds = MoveValidation::MAX_SYNC_INTERVAL_SEC;
 	if (lastTick > 0 && now > lastTick)
 		deltaSeconds = static_cast<float>(now - lastTick) / 1000.f;
 
-	if (deltaSeconds > MAX_ALLOWED_DELTA_SEC)
-		deltaSeconds = MAX_ALLOWED_DELTA_SEC;
+	if (deltaSeconds > MoveValidation::MAX_ALLOWED_DELTA_SEC)
+		deltaSeconds = MoveValidation::MAX_ALLOWED_DELTA_SEC;
 	if (deltaSeconds < 0.001f)
-		deltaSeconds = MAX_SYNC_INTERVAL_SEC;
+		deltaSeconds = MoveValidation::MAX_SYNC_INTERVAL_SEC;
 
 	const float moveSpeed = player->GetMoveSpeed();
-	const float maxDistance = moveSpeed * deltaSeconds + MOVE_TOLERANCE;
+	const float maxDistance = MoveValidation::CalcMaxDistance(moveSpeed, deltaSeconds);
 
 	const float dx = clientX - serverX;
 	const float dy = clientY - serverY;
 	const float distanceSq = dx * dx + dy * dy;
 
-	if (distanceSq <= maxDistance * maxDistance || distanceSq < 0.0001f)
+	float clampedX = clientX;
+	float clampedY = clientY;
+
+	const float maxDistanceSq = maxDistance * maxDistance;
+	const float cheatRejectDistance = MoveValidation::CalcCheatRejectDistance(maxDistance);
+	const float cheatRejectDistanceSq = cheatRejectDistance * cheatRejectDistance;
+
+	if (distanceSq > cheatRejectDistanceSq)
 	{
-		outX = clientX;
-		outY = clientY;
-		return;
+		// 비정상 텔레포트: 이동 불가. 현재 서버 위치 유지 후 충돌만 재검증.
+		clampedX = serverX;
+		clampedY = serverY;
+	}
+	else if (distanceSq > maxDistanceSq && distanceSq >= 0.0001f)
+	{
+		// 허용 이동 거리 밖: 이동 가능 범위 경계까지 끌어당김.
+		const float distance = sqrtf(distanceSq);
+		const float ratio = maxDistance / distance;
+		clampedX = serverX + dx * ratio;
+		clampedY = serverY + dy * ratio;
 	}
 
-	const float distance = sqrtf(distanceSq);
-	const float ratio = maxDistance / distance;
-	outX = serverX + dx * ratio;
-	outY = serverY + dy * ratio;
+	_mapCollision.ResolveMove(serverX, serverY, clampedX, clampedY, CREATURE_COLLISION_RADIUS, outX, outY);
 }
 
 PlayerRef Room::FindPlayer(int32 objectId)

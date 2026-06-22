@@ -8,6 +8,8 @@ public class Define
     public const char MAP_TOOL_WALL = '0';
     public const char MAP_TOOL_NONE = '1';
 
+    public const float CREATURE_COLLISION_RADIUS = 0.35f;
+
 	public enum EScene
     {
         Unknown,

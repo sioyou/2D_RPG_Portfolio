@@ -10,6 +10,12 @@ RoomManager GRoomManager;
 void RoomManager::Init()
 {
 	RoomRef room = CreateRoom(DEFAULT_ROOM_ID);
+	if (room == nullptr)
+	{
+		cout << "[RoomManager] Init failed. default room could not be created." << endl;
+		return;
+	}
+
 	InitDefaultRoom(room);
 	cout << "[RoomManager] Init complete. defaultRoomId=" << DEFAULT_ROOM_ID << endl;
 }
@@ -32,7 +38,7 @@ bool RoomManager::EnterGame(PlayerRef player, Protocol::S_C_ENTER_GAME& outPkt)
 		return false;
 
 	RoomRef room = GetRoom(DEFAULT_ROOM_ID);
-	if (room == nullptr)
+	if (room == nullptr || room->HasMapCollision() == false)
 		return false;
 
 	const bool wasInRoom = room->HasPlayer(player);
@@ -57,6 +63,8 @@ bool RoomManager::EnterGame(PlayerRef player, Protocol::S_C_ENTER_GAME& outPkt)
 
 	outPkt.set_success(true);
 	outPkt.set_myobjectid(player->GetObjectId());
+	outPkt.set_roomid(room->GetRoomId());
+	outPkt.set_mapid(room->GetMapId());
 	room->FillEnterGameSpawns(outPkt, player);
 	return true;
 }
@@ -128,7 +136,22 @@ RoomRef RoomManager::CreateRoom(int32 roomId)
 	else
 		config.roomId = roomId;
 
+	const int32 mapId = config.mapId > 0 ? config.mapId : 1;
+	if (GDataManager.GetMapCollision(mapId) == nullptr)
+	{
+		cout << "[RoomManager] CreateRoom failed. map collision missing. roomId=" << roomId
+			<< " mapId=" << mapId << endl;
+		return nullptr;
+	}
+
 	RoomRef room = make_shared<Room>(roomId, config);
+	if (room->HasMapCollision() == false)
+	{
+		cout << "[RoomManager] CreateRoom failed. map collision not loaded. roomId=" << roomId
+			<< " mapId=" << mapId << endl;
+		return nullptr;
+	}
+
 	_rooms[roomId] = room;
 	return room;
 }

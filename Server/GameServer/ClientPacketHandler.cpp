@@ -109,6 +109,9 @@ bool Handle_C_S_MOVE(PacketSessionRef& session, Protocol::C_S_MOVE& pkt)
 	movePkt.set_diry(player->GetMoveDirY());
 
 	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(movePkt);
+
+	// 본인에게는 매 이동마다 서버 권한 위치를 전달한다.
+	gameSession->Send(sendBuffer);
 	room->BroadcastToView(validatedX, validatedY, sendBuffer, gameSession);
 	return true;
 }

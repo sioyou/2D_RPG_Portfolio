@@ -1,6 +1,7 @@
 [
   {
     "roomId": 1,
+    "mapId": 1,
     "originX": -10.0,
     "originY": -10.0,
     "zoneSize": 10.0,

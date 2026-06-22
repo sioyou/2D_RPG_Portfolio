@@ -60,6 +60,9 @@
     <ClCompile Include="Room.cpp">
       <Filter>GameContents</Filter>
     </ClCompile>
+    <ClCompile Include="MapCollision.cpp">
+      <Filter>GameContents</Filter>
+    </ClCompile>
     <ClCompile Include="Zone.cpp">
       <Filter>GameContents</Filter>
     </ClCompile>
@@ -117,6 +120,15 @@
       <Filter>GameContents</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
+      <Filter>GameContents</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCollision.h">
+      <Filter>GameContents</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCollision.h">
+      <Filter>GameContents</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveValidation.h">
       <Filter>GameContents</Filter>
     </ClInclude>
     <ClInclude Include="Zone.h">

@@ -1,6 +1,7 @@
 #pragma once
 #include "Zone.h"
 #include "Monster.h"
+#include "MapCollision.h"
 #include "Data/DataTypes.h"
 #include "Protocol.pb.h"
 
@@ -11,6 +12,8 @@ public:
 	Room(int32 roomId, const RoomData& config);
 
 	int32 GetRoomId() const { return _roomId; }
+	int32 GetMapId() const { return _mapId; }
+	bool HasMapCollision() const { return _mapCollision.IsLoaded(); }
 	float GetZoneSize() const { return _zoneSize; }
 	float GetViewRadius() const { return _viewRadius; }
 	int32 GetZoneCountX() const { return _zoneCountX; }
@@ -82,6 +85,7 @@ private:
 	void SyncMoverViewOfEntities(PlayerRef player, float oldX, float oldY, float newX, float newY);
 
 	int32 _roomId = 0;
+	int32 _mapId = 0;
 	float _originX = 0.f;
 	float _originY = 0.f;
 	float _zoneSize = 10.f;
@@ -92,6 +96,7 @@ private:
 	int32 _zoneCountY = 1;
 
 	Vector<ZoneRef> _zones;
+	MapCollision _mapCollision;
 
 	USE_LOCK;
 	HashMap<int32, PlayerRef> _players;

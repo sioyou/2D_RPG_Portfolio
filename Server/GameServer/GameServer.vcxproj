@@ -176,6 +176,7 @@
     <ClCompile Include="ObjectIdGenerator.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="MapCollision.cpp" />
     <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="Zone.cpp" />
     <ClCompile Include="Enum.pb.cc">
@@ -218,6 +219,8 @@
     <ClInclude Include="ObjectIdGenerator.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Room.h" />
+    <ClInclude Include="MapCollision.h" />
+    <ClInclude Include="MoveValidation.h" />
     <ClInclude Include="RoomManager.h" />
     <ClInclude Include="Zone.h" />
     <ClInclude Include="Enum.pb.h" />

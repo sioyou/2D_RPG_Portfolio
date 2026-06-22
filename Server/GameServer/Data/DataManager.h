@@ -13,6 +13,7 @@ public:
 	const PlayerData* GetPlayer(int32 playerDataId) const;
 	const PlayerData* GetDefaultPlayer() const;
 	const RoomData* GetRoom(int32 roomId) const;
+	const MapCollisionData* GetMapCollision(int32 mapId) const;
 	const std::vector<SpawnEntryData>& GetRoomSpawns(int32 roomId) const;
 
 private:
@@ -21,6 +22,7 @@ private:
 	bool LoadPlayers(const std::string& filePath);
 	bool LoadRooms(const std::string& filePath);
 	bool LoadRoomSpawns(const std::string& filePath);
+	bool LoadMapCollisions(const std::string& filePath);
 
 	static std::string ResolveDataRoot(const std::string& dataRootName);
 
@@ -28,6 +30,7 @@ private:
 	std::unordered_map<int32, MonsterData> _monsters;
 	std::unordered_map<int32, PlayerData> _players;
 	std::unordered_map<int32, RoomData> _rooms;
+	std::unordered_map<int32, MapCollisionData> _mapCollisions;
 	std::unordered_map<int32, std::vector<SpawnEntryData>> _roomSpawns;
 };
 

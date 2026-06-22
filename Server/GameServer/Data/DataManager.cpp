@@ -83,6 +83,7 @@ bool DataManager::Init(const std::string& dataRootName)
 		<< " monsters=" << _monsters.size()
 		<< " players=" << _players.size()
 		<< " rooms=" << _rooms.size()
+		<< " mapCollisions=" << _mapCollisions.size()
 		<< " roomSpawns=" << _roomSpawns.size() << endl;
 	return true;
 }
@@ -101,6 +102,9 @@ bool DataManager::LoadFromDirectory(const std::string& dataRootPath)
 		return false;
 
 	if (LoadRoomSpawns((rootPath / "RoomSpawns.json").string()) == false)
+		return false;
+
+	if (LoadMapCollisions((rootPath / "MapCollisions.json").string()) == false)
 		return false;
 
 	return true;
@@ -223,6 +227,46 @@ bool DataManager::LoadRoomSpawns(const std::string& filePath)
 	return true;
 }
 
+bool DataManager::LoadMapCollisions(const std::string& filePath)
+{
+	nlohmann::json root;
+	if (LoadJsonArrayFromFile(filePath, "MapCollisions.json", root) == false)
+		return false;
+
+	try
+	{
+		_mapCollisions.clear();
+		for (const nlohmann::json& entry : root)
+		{
+			MapCollisionData data = entry.get<MapCollisionData>();
+
+			if (_mapCollisions.find(data.mapId) != _mapCollisions.end())
+			{
+				cout << "[DataManager] Duplicate map id=" << data.mapId << endl;
+				return false;
+			}
+
+			const size_t expectedSize = static_cast<size_t>(data.width) * static_cast<size_t>(data.height);
+			if (data.cells.size() != expectedSize)
+			{
+				cout << "[DataManager] MapCollisions.json mapId=" << data.mapId
+					<< " cells size mismatch. expected=" << expectedSize
+					<< " actual=" << data.cells.size() << endl;
+				return false;
+			}
+
+			_mapCollisions[data.mapId] = std::move(data);
+		}
+	}
+	catch (const std::exception& e)
+	{
+		cout << "[DataManager] MapCollisions.json parse error: " << e.what() << endl;
+		return false;
+	}
+
+	return true;
+}
+
 const MonsterData* DataManager::GetMonster(int32 monsterTypeId) const
 {
 	auto it = _monsters.find(monsterTypeId);
@@ -255,6 +299,15 @@ const RoomData* DataManager::GetRoom(int32 roomId) const
 {
 	auto it = _rooms.find(roomId);
 	if (it == _rooms.end())
+		return nullptr;
+
+	return &it->second;
+}
+
+const MapCollisionData* DataManager::GetMapCollision(int32 mapId) const
+{
+	auto it = _mapCollisions.find(mapId);
+	if (it == _mapCollisions.end())
 		return nullptr;
 
 	return &it->second;

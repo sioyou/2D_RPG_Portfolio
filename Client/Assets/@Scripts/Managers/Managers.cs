@@ -11,9 +11,11 @@ public class Managers : MonoBehaviour
 
     private GameManager _game = new GameManager();
     private ObjectManager _object = new ObjectManager();
+    private MapManager _map = new MapManager();
     
     public static GameManager Game { get { return Instance?._game; } }
     public static ObjectManager Object { get { return Instance?._object; } }
+    public static MapManager Map { get { return Instance?._map; } }
     
     #endregion
 
@@ -67,5 +69,6 @@ public class Managers : MonoBehaviour
         Scene.Clear();
         UI.Clear();
         Pool.Clear();
+        Map.Clear();
     }
 }

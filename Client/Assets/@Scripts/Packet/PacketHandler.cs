@@ -24,8 +24,8 @@ public static class PacketHandler
         if (pkt == null)
             return;
 
-        Debug.Log($"S_C_ENTER_GAME success={pkt.Success} myObjectId={pkt.MyObjectId} spawns={pkt.Spawns.Count}");
-        Managers.Network.HandleEnterGameResponse(pkt.Success, pkt.MyObjectId, pkt.Spawns);
+        Debug.Log($"S_C_ENTER_GAME success={pkt.Success} myObjectId={pkt.MyObjectId} roomId={pkt.RoomId} mapId={pkt.MapId} spawns={pkt.Spawns.Count}");
+        Managers.Network.HandleEnterGameResponse(pkt.Success, pkt.MyObjectId, pkt.RoomId, pkt.MapId, pkt.Spawns);
     }
 
     public static void S_C_LEAVE_GAMEHandler(PacketSession session, IMessage packet)

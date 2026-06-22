@@ -37,6 +37,12 @@ int main()
 
 	GRoomManager.Init();
 
+	if (GRoomManager.GetRoom(RoomManager::DEFAULT_ROOM_ID) == nullptr)
+	{
+		cout << "[GameServer] Failed to initialize default room." << endl;
+		return -1;
+	}
+
 	ServerServiceRef service = MakeShared<ServerService>(
 		NetAddress(L"0.0.0.0", 7777),
 		MakeShared<IocpCore>(),

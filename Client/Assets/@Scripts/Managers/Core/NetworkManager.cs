@@ -165,13 +165,20 @@ public class NetworkManager
         Debug.Log("[NetworkManager] C_S_ENTER_GAME sent.");
     }
 
-    public void HandleEnterGameResponse(bool success, int myObjectId, Google.Protobuf.Collections.RepeatedField<SpawnEntry> spawns)
+    public void HandleEnterGameResponse(bool success, int myObjectId, int roomId, int mapId, Google.Protobuf.Collections.RepeatedField<SpawnEntry> spawns)
     {
         if (success)
         {
+            if (Managers.Map.Init(mapId) == false)
+            {
+                Debug.LogError($"[NetworkManager] Enter game failed. mapId={mapId} could not be loaded.");
+                OnEnterGameFailed?.Invoke();
+                return;
+            }
+
             Managers.Game.SetMyObjectId(myObjectId);
             Managers.Object.SpawnAll(spawns);
-            Debug.Log($"[NetworkManager] Enter game success. myObjectId={myObjectId} spawnCount={spawns?.Count ?? 0}");
+            Debug.Log($"[NetworkManager] Enter game success. myObjectId={myObjectId} roomId={roomId} mapId={mapId} spawnCount={spawns?.Count ?? 0}");
             OnEnterGameSuccess?.Invoke();
         }
         else

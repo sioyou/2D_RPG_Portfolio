@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using static Define;
 
 public class GameScene : BaseScene
@@ -22,6 +22,7 @@ public class GameScene : BaseScene
 
     public override void Clear()
     {
+        Managers.Map.Clear();
         Managers.Object.Clear();
     }
 
