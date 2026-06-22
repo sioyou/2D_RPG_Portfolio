@@ -15,7 +15,7 @@ Unity 클라이언트와 Windows C++ 게임 서버로 구성된 2D RPG 포트폴
    - 기본 리슨 주소: `0.0.0.0:7777` (모든 NIC)
 3. Unity Hub에서 `Client` 폴더를 프로젝트로 엽니다.
 4. **TitleScene**을 실행(Play)합니다.
-5. Addressables **Preload** 완료 후 서버에 TCP 연결을 시도하고, 성공 시 **GameScene**으로 전환됩니다.
+5. Addressables **Preload** 완료 후 서버에 TCP 연결 → **로그인** (`UI_LoginPopup`) 성공 시 **GameScene**으로 전환됩니다.
 
 ## 클라이언트
 
@@ -28,7 +28,7 @@ Unity 클라이언트와 Windows C++ 게임 서버로 구성된 2D RPG 포트폴
 
 ### Unity 씬 설정 (필수)
 
-- **TitleScene**: `EventSystem`, `UI_TitleScene` (자식 `StartButton`, `StatusText`)
+- **TitleScene**: `EventSystem`, `UI_TitleScene` (연결 후 `UI_LoginPopup` 표시)
 - **GameScene**: `GameScene` 스크립트가 붙은 오브젝트
 
 ## 서버
@@ -68,7 +68,38 @@ GenPackets.bat
 
 ## 현재 구현 범위 (MVP)
 
+### 클라이언트
+
 - [x] Managers 프레임워크, Addressables Preload
-- [x] 타이틀에서 게임 서버 TCP 연결
-- [x] 연결 성공 시 GameScene 전환
-- [ ] 로그인 패킷 (`C_S_LOGIN` / `S_C_LOGIN`) 및 인게임 동기화 (예정)
+- [x] TitleScene: Preload → TCP 연결 → `UI_LoginPopup` 로그인 → GameScene 전환
+- [x] GameScene 진입 시 `C_S_ENTER_GAME`, 퇴장·앱 종료 시 `LeaveGameAndDisconnect`
+- [x] `ObjectManager` — 플레이어·몬스터 스폰/디스폰 (`PlayerObject`, `MonsterObject`, `MyPlayerObject`)
+- [x] 조이스틱 이동, `C_S_MOVE` 주기 전송 및 `S_C_MOVE` 반영 (서버 위치 보정 포함)
+- [x] 공격 입력 → `C_S_ATTACK`, `S_C_ATTACK` / `S_C_DIE` 애니메이션·HP 반영
+- [x] 카메라 Follow (`CameraController`), 월드 HP 바 (`UI_WorldHpBar`)
+- [x] 맵 로드·타일맵 빌드 (`MapManager`, `MapTilemapBuilder`, `MapCollisions.json`)
+- [x] 클라·서버 공통 이동 검증 상수 (`MoveValidation`)
+
+### 서버
+
+- [x] IOCP 기반 GameServer (`0.0.0.0:7777`), Protobuf 패킷 처리
+- [x] 인메모리 `PlayerManager` / `CreatureManager` / `RoomManager`
+- [x] JSON 데이터 테이블 (`Monsters`, `Players`, `Rooms`, `RoomSpawns`, `MapCollisions`)
+- [x] Room + Zone AOI — 시야 내 스폰·브로드캐스트
+- [x] 맵 충돌 검증 (`MapCollision`), 이동·공격 서버 권위 처리
+- [x] 몬스터 스폰 (룸별 `RoomSpawns.json`), 피격·사망 처리
+
+### 네트워크 패킷
+
+- [x] `C_S_LOGIN` / `S_C_LOGIN`
+- [x] `C_S_ENTER_GAME` / `S_C_ENTER_GAME` (스폰 목록 포함)
+- [x] `C_S_LEAVE_GAME` / `S_C_LEAVE_GAME`, `S_C_SPAWN` / `S_C_DESPAWN`
+- [x] `C_S_MOVE` / `S_C_MOVE`
+- [x] `C_S_ATTACK` / `S_C_ATTACK`, `S_C_DIE`
+- [ ] `C_S_CHAT` / `S_C_CHAT` (핸들러 스텁, UI 미구현)
+
+### 예정
+
+- [ ] 연결·로그인 실패 재시도 UI
+- [ ] 몬스터 AI·리스폰
+- [ ] 채팅 UI, 추가 Room/맵
