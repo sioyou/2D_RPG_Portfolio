@@ -36,7 +36,7 @@
     <ClCompile Include="PlayerManager.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="ZoneManager.cpp">
+    <ClCompile Include="RoomManager.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="ObjectIdGenerator.cpp">
@@ -55,6 +55,9 @@
       <Filter>GameContents</Filter>
     </ClCompile>
     <ClCompile Include="CreatureManager.cpp">
+      <Filter>GameContents</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
       <Filter>GameContents</Filter>
     </ClCompile>
     <ClCompile Include="Zone.cpp">
@@ -92,7 +95,7 @@
     <ClInclude Include="PlayerManager.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="ZoneManager.h">
+    <ClInclude Include="RoomManager.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="ObjectIdGenerator.h">
@@ -111,6 +114,9 @@
       <Filter>GameContents</Filter>
     </ClInclude>
     <ClInclude Include="CreatureManager.h">
+      <Filter>GameContents</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
       <Filter>GameContents</Filter>
     </ClInclude>
     <ClInclude Include="Zone.h">

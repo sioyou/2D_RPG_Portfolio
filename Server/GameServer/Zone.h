@@ -1,31 +1,46 @@
 ﻿#pragma once
+#include "Creature.h"
 #include "Player.h"
-#include "Protocol.pb.h"
 
+/* Zone: spatial cell inside a Room (AOI unit). */
 class Zone
 {
 public:
-	explicit Zone(int32 zoneId);
+	explicit Zone(int32 zoneIndex);
 
-	int32 GetZoneId() const { return _zoneId; }
+	int32 GetZoneIndex() const { return _zoneIndex; }
 
-	bool HasPlayer(PlayerRef player);
-	bool EnterPlayer(PlayerRef player);
-	void LeavePlayer(PlayerRef player);
+	bool HasPlayer(int32 objectId);
+	void AddPlayer(PlayerRef player);
+	void RemovePlayer(int32 objectId);
 
-	void FillEnterGameSpawns(Protocol::S_C_ENTER_GAME& pkt);
-	void Broadcast(SendBufferRef sendBuffer);
+	void AddCreature(CreatureRef creature);
+	void RemoveCreature(int32 objectId);
 
-	void ValidateClientPosition(PlayerRef player, float clientX, float clientY, float& outX, float& outY);
+	template<typename Func>
+	void ForEachCreature(Func&& func)
+	{
+		READ_LOCK;
+		for (const auto& pair : _creatures)
+			func(pair.second);
+	}
 
-	PlayerRef FindPlayer(int32 objectId);
+	template<typename Func>
+	void ForEachPlayer(Func&& func)
+	{
+		READ_LOCK;
+		for (const auto& pair : _players)
+			func(pair.second);
+	}
+
+	void CollectSessions(Vector<GameSessionRef>& out);
 
 private:
-	int32 _zoneId = 0;
+	int32 _zoneIndex = 0;
 
 	USE_LOCK;
 	HashMap<int32, PlayerRef> _players;
-	Set<GameSessionRef> _sessions;
+	HashMap<int32, CreatureRef> _creatures;
 };
 
 using ZoneRef = shared_ptr<Zone>;

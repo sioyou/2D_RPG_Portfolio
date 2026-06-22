@@ -1,0 +1,13 @@
+[
+  {
+    "roomId": 1,
+    "originX": -10.0,
+    "originY": -10.0,
+    "zoneSize": 10.0,
+    "viewRadius": 4.5,
+    "spawnPosX": -5.0,
+    "spawnPosY": -5.0,
+    "zoneCountX": 4,
+    "zoneCountY": 4
+  }
+]

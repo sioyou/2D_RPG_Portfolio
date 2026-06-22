@@ -82,7 +82,8 @@ bool DataManager::Init(const std::string& dataRootName)
 	cout << "[DataManager] Init complete. root=" << _dataRootPath
 		<< " monsters=" << _monsters.size()
 		<< " players=" << _players.size()
-		<< " zones=" << _zoneSpawns.size() << endl;
+		<< " rooms=" << _rooms.size()
+		<< " roomSpawns=" << _roomSpawns.size() << endl;
 	return true;
 }
 
@@ -96,7 +97,10 @@ bool DataManager::LoadFromDirectory(const std::string& dataRootPath)
 	if (LoadPlayers((rootPath / "Players.json").string()) == false)
 		return false;
 
-	if (LoadZoneSpawns((rootPath / "ZoneSpawns.json").string()) == false)
+	if (LoadRooms((rootPath / "Rooms.json").string()) == false)
+		return false;
+
+	if (LoadRoomSpawns((rootPath / "RoomSpawns.json").string()) == false)
 		return false;
 
 	return true;
@@ -164,24 +168,55 @@ bool DataManager::LoadPlayers(const std::string& filePath)
 	return true;
 }
 
-bool DataManager::LoadZoneSpawns(const std::string& filePath)
+bool DataManager::LoadRooms(const std::string& filePath)
 {
 	nlohmann::json root;
-	if (LoadJsonArrayFromFile(filePath, "ZoneSpawns.json", root) == false)
+	if (LoadJsonArrayFromFile(filePath, "Rooms.json", root) == false)
 		return false;
 
 	try
 	{
-		_zoneSpawns.clear();
-		for (const nlohmann::json& zoneEntry : root)
+		_rooms.clear();
+		for (const nlohmann::json& entry : root)
 		{
-			ZoneSpawnData zoneData = zoneEntry.get<ZoneSpawnData>();
-			_zoneSpawns[zoneData.zoneId] = std::move(zoneData.spawns);
+			RoomData data = entry.get<RoomData>();
+
+			if (_rooms.find(data.roomId) != _rooms.end())
+			{
+				cout << "[DataManager] Duplicate room id=" << data.roomId << endl;
+				return false;
+			}
+
+			_rooms[data.roomId] = std::move(data);
 		}
 	}
 	catch (const std::exception& e)
 	{
-		cout << "[DataManager] ZoneSpawns.json parse error: " << e.what() << endl;
+		cout << "[DataManager] Rooms.json parse error: " << e.what() << endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool DataManager::LoadRoomSpawns(const std::string& filePath)
+{
+	nlohmann::json root;
+	if (LoadJsonArrayFromFile(filePath, "RoomSpawns.json", root) == false)
+		return false;
+
+	try
+	{
+		_roomSpawns.clear();
+		for (const nlohmann::json& roomEntry : root)
+		{
+			RoomSpawnData roomData = roomEntry.get<RoomSpawnData>();
+			_roomSpawns[roomData.roomId] = std::move(roomData.spawns);
+		}
+	}
+	catch (const std::exception& e)
+	{
+		cout << "[DataManager] RoomSpawns.json parse error: " << e.what() << endl;
 		return false;
 	}
 
@@ -216,10 +251,19 @@ const PlayerData* DataManager::GetDefaultPlayer() const
 	return GetPlayer(DEFAULT_PLAYER_DATA_ID);
 }
 
-const std::vector<SpawnEntryData>& DataManager::GetZoneSpawns(int32 zoneId) const
+const RoomData* DataManager::GetRoom(int32 roomId) const
 {
-	auto it = _zoneSpawns.find(zoneId);
-	if (it == _zoneSpawns.end())
+	auto it = _rooms.find(roomId);
+	if (it == _rooms.end())
+		return nullptr;
+
+	return &it->second;
+}
+
+const std::vector<SpawnEntryData>& DataManager::GetRoomSpawns(int32 roomId) const
+{
+	auto it = _roomSpawns.find(roomId);
+	if (it == _roomSpawns.end())
 		return EMPTY_SPAWNS;
 
 	return it->second;

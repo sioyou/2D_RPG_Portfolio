@@ -22,7 +22,7 @@ public:
 	EPlayerState GetState() const { return _state; }
 
 	void Init(const string& playerId, int32 objectId, int32 playerDataId = DEFAULT_PLAYER_DATA_ID);
-	void SetZoneId(int32 zoneId) { Creature::SetZoneId(zoneId); }
+	void SetRoomId(int32 roomId) { Creature::SetRoomId(roomId); }
 	void SetState(EPlayerState state) { _state = state; }
 
 	void SetSession(GameSessionRef session);

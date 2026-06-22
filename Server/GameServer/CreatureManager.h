@@ -4,7 +4,7 @@
 
 /*----------------------
 	CreatureManager
-	- 존 내 Player / Monster 등 Creature 통합 관리 (objectId 기준)
+	- Room 내 Player / Monster 등 Creature 통합 관리 (objectId 기준)
 -----------------------*/
 class CreatureManager
 {
@@ -15,15 +15,15 @@ public:
 	CreatureRef Find(int32 objectId);
 	MonsterRef FindMonster(int32 objectId);
 
-	MonsterRef SpawnMonster(int32 zoneId, Protocol::MonsterType monsterType, int32 level, float posX, float posY);
+	MonsterRef SpawnMonster(int32 roomId, Protocol::MonsterType monsterType, int32 level, float posX, float posY);
 
 	template<typename Func>
-	void ForEachInZone(int32 zoneId, Func&& func)
+	void ForEachInRoom(int32 roomId, Func&& func)
 	{
 		READ_LOCK;
 		for (const auto& pair : _creatures)
 		{
-			if (pair.second->GetZoneId() != zoneId)
+			if (pair.second->GetRoomId() != roomId)
 				continue;
 
 			func(pair.second);
@@ -31,9 +31,9 @@ public:
 	}
 
 	template<typename Func>
-	void ForEachMonsterInZone(int32 zoneId, Func&& func)
+	void ForEachMonsterInRoom(int32 roomId, Func&& func)
 	{
-		ForEachInZone(zoneId, [&func](CreatureRef creature)
+		ForEachInRoom(roomId, [&func](CreatureRef creature)
 		{
 			if (creature->GetObjectType() != Protocol::OBJECT_TYPE_MONSTER)
 				return;
@@ -42,7 +42,7 @@ public:
 		});
 	}
 
-	int32 GetCountInZone(int32 zoneId);
+	int32 GetCountInRoom(int32 roomId);
 
 private:
 	USE_LOCK;

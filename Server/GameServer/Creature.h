@@ -4,6 +4,8 @@
 
 class Creature : public enable_shared_from_this<Creature>
 {
+	friend class Room;
+
 public:
 	virtual ~Creature() = default;
 
@@ -11,7 +13,8 @@ public:
 	virtual const string& GetDisplayName() const = 0;
 
 	int32 GetObjectId() const { return _objectId; }
-	int32 GetZoneId() const { return _zoneId; }
+	int32 GetRoomId() const { return _roomId; }
+	int32 GetZoneIndex() const { return _zoneIndex; }
 
 	const CreatureStat& GetStat() const { return _stat; }
 	CreatureStat& GetStat() { return _stat; }
@@ -33,13 +36,15 @@ public:
 
 protected:
 	void SetObjectId(int32 objectId) { _objectId = objectId; }
-	void SetZoneId(int32 zoneId) { _zoneId = zoneId; }
+	void SetRoomId(int32 roomId) { _roomId = roomId; }
+	void SetZoneIndex(int32 zoneIndex) { _zoneIndex = zoneIndex; }
 
 	void Die();
 	virtual void OnDied();
 
 	int32 _objectId = 0;
-	int32 _zoneId = 0;
+	int32 _roomId = 0;
+	int32 _zoneIndex = -1;
 
 	CreatureStat _stat;
 	int32 _stateFlags = Protocol::CREATURE_STATE_NONE;

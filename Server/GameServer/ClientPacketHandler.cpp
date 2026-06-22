@@ -2,7 +2,7 @@
 #include "ClientPacketHandler.h"
 #include "GameSession.h"
 #include "PlayerManager.h"
-#include "ZoneManager.h"
+#include "RoomManager.h"
 #include "CreatureManager.h"
 #include "Creature.h"
 #include "CreatureStateUtil.h"
@@ -36,7 +36,7 @@ bool Handle_C_S_ENTER_GAME(PacketSessionRef& session, Protocol::C_S_ENTER_GAME& 
 	PlayerRef player = GPlayerManager.FindBySession(gameSession);
 
 	Protocol::S_C_ENTER_GAME enterPkt;
-	if (GZoneManager.EnterGame(player, enterPkt) == false)
+	if (GRoomManager.EnterGame(player, enterPkt) == false)
 	{
 		enterPkt.set_success(false);
 		enterPkt.set_myobjectid(0);
@@ -60,7 +60,7 @@ bool Handle_C_S_LEAVE_GAME(PacketSessionRef& session, Protocol::C_S_LEAVE_GAME& 
 	}
 	else
 	{
-		GZoneManager.LeaveGame(player);
+		GRoomManager.LeaveGame(player);
 		leavePkt.set_success(true);
 	}
 
@@ -79,15 +79,20 @@ bool Handle_C_S_MOVE(PacketSessionRef& session, Protocol::C_S_MOVE& pkt)
 	if (player->GetState() != EPlayerState::InGame)
 		return false;
 
-	ZoneRef zone = GZoneManager.GetZone(player->GetZoneId());
-	if (zone == nullptr)
+	RoomRef room = GRoomManager.GetRoom(player->GetRoomId());
+	if (room == nullptr)
 		return false;
+
+	const float oldX = player->GetStat().GetPosX();
+	const float oldY = player->GetStat().GetPosY();
 
 	float validatedX = 0.f;
 	float validatedY = 0.f;
-	zone->ValidateClientPosition(player, pkt.posx(), pkt.posy(), validatedX, validatedY);
+	room->ValidateClientPosition(player, pkt.posx(), pkt.posy(), validatedX, validatedY);
 
 	player->GetStat().SetPosition(validatedX, validatedY);
+	room->OnPlayerMoved(player, oldX, oldY, validatedX, validatedY);
+
 	if (pkt.dirx() != 0.f || pkt.diry() != 0.f)
 		player->SetMoveDirection(pkt.dirx(), pkt.diry());
 
@@ -104,7 +109,7 @@ bool Handle_C_S_MOVE(PacketSessionRef& session, Protocol::C_S_MOVE& pkt)
 	movePkt.set_diry(player->GetMoveDirY());
 
 	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(movePkt);
-	zone->Broadcast(sendBuffer);
+	room->BroadcastToView(validatedX, validatedY, sendBuffer, gameSession);
 	return true;
 }
 
@@ -118,8 +123,8 @@ bool Handle_C_S_ATTACK(PacketSessionRef& session, Protocol::C_S_ATTACK& pkt)
 	if (attacker->GetState() != EPlayerState::InGame)
 		return false;
 
-	ZoneRef zone = GZoneManager.GetZone(attacker->GetZoneId());
-	if (zone == nullptr)
+	RoomRef room = GRoomManager.GetRoom(attacker->GetRoomId());
+	if (room == nullptr)
 		return false;
 
 	const uint64 now = ::GetTickCount64();
@@ -140,7 +145,7 @@ bool Handle_C_S_ATTACK(PacketSessionRef& session, Protocol::C_S_ATTACK& pkt)
 	float targetDirY = 0.f;
 	int32 damageDealt = 0;
 
-	GCreatureManager.ForEachMonsterInZone(attacker->GetZoneId(), [&](MonsterRef monster)
+	room->ForEachMonsterInView(ax, ay, [&](MonsterRef monster)
 	{
 		if (hitMonster != nullptr)
 			return;
@@ -172,16 +177,20 @@ bool Handle_C_S_ATTACK(PacketSessionRef& session, Protocol::C_S_ATTACK& pkt)
 	attackPkt.set_dirx(pkt.dirx());
 	attackPkt.set_diry(pkt.diry());
 	attackPkt.set_targetid(hitTargetId);
-	attackPkt.set_targethp(hitMonster->GetStat().GetHp());
-	attackPkt.set_targetdirx(targetDirX);
-	attackPkt.set_targetdiry(targetDirY);
+	if (hitMonster != nullptr)
+	{
+		attackPkt.set_targethp(hitMonster->GetStat().GetHp());
+		attackPkt.set_targetdirx(targetDirX);
+		attackPkt.set_targetdiry(targetDirY);
+	}
 
-	zone->Broadcast(ClientPacketHandler::MakeSendBuffer(attackPkt));
+	room->BroadcastToView(ax, ay, ClientPacketHandler::MakeSendBuffer(attackPkt));
 
 	if (hitMonster != nullptr && hitMonster->IsDead())
 	{
 		CreatureRef deadCreature = static_pointer_cast<Creature>(hitMonster);
-		GZoneManager.HandleCreatureDeath(zone, deadCreature);
+		GRoomManager.HandleCreatureDeath(room, deadCreature);
+		room->UnregisterCreature(deadCreature);
 		GCreatureManager.Remove(deadCreature->GetObjectId());
 	}
 

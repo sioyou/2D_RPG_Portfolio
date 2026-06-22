@@ -9,7 +9,7 @@ public:
 
 	Protocol::MonsterType GetTemplateId() const { return _monsterType; }
 
-	void Init(int32 objectId, int32 zoneId, Protocol::MonsterType monsterType, int32 level);
+	void Init(int32 objectId, int32 roomId, Protocol::MonsterType monsterType, int32 level);
 
 private:
 	Protocol::MonsterType _monsterType = Protocol::MONSTER_TYPE_NONE;

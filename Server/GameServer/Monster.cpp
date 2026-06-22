@@ -2,10 +2,10 @@
 #include "Monster.h"
 #include "Data/DataManager.h"
 
-void Monster::Init(int32 objectId, int32 zoneId, Protocol::MonsterType monsterType, int32 level)
+void Monster::Init(int32 objectId, int32 roomId, Protocol::MonsterType monsterType, int32 level)
 {
 	SetObjectId(objectId);
-	SetZoneId(zoneId);
+	SetRoomId(roomId);
 	_monsterType = monsterType;
 
 	CreatureStat& stat = GetStat();

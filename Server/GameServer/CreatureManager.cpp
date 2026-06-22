@@ -54,31 +54,31 @@ MonsterRef CreatureManager::FindMonster(int32 objectId)
 	return static_pointer_cast<Monster>(creature);
 }
 
-MonsterRef CreatureManager::SpawnMonster(int32 zoneId, Protocol::MonsterType monsterType, int32 level, float posX, float posY)
+MonsterRef CreatureManager::SpawnMonster(int32 roomId, Protocol::MonsterType monsterType, int32 level, float posX, float posY)
 {
 	const int32 objectId = ObjectIdGenerator::Generate();
 
 	MonsterRef monster = make_shared<Monster>();
-	monster->Init(objectId, zoneId, monsterType, level);
+	monster->Init(objectId, roomId, monsterType, level);
 
 	CreatureStat& stat = monster->GetStat();
 	stat.SetPosition(posX, posY);
 
 	Add(monster);
 
-	cout << "[CreatureManager] SpawnMonster. zoneId=" << zoneId
+	cout << "[CreatureManager] SpawnMonster. roomId=" << roomId
 		<< " objectId=" << objectId << " name=" << monster->GetDisplayName() << endl;
 	return monster;
 }
 
-int32 CreatureManager::GetCountInZone(int32 zoneId)
+int32 CreatureManager::GetCountInRoom(int32 roomId)
 {
 	int32 count = 0;
 
 	READ_LOCK;
 	for (const auto& pair : _creatures)
 	{
-		if (pair.second->GetZoneId() == zoneId)
+		if (pair.second->GetRoomId() == roomId)
 			++count;
 	}
 

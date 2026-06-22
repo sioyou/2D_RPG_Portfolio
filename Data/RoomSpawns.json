@@ -1,0 +1,23 @@
+[
+  {
+    "roomId": 1,
+    "spawns": [
+      { "monsterType": 1, "level": 1, "posX": -5.0, "posY": -5.0 },
+      { "monsterType": 2, "level": 1, "posX": 5.0, "posY": -5.0 },
+      { "monsterType": 1, "level": 1, "posX": 15.0, "posY": -5.0 },
+      { "monsterType": 2, "level": 1, "posX": 25.0, "posY": -5.0 },
+      { "monsterType": 2, "level": 1, "posX": -5.0, "posY": 5.0 },
+      { "monsterType": 1, "level": 1, "posX": 5.0, "posY": 5.0 },
+      { "monsterType": 2, "level": 1, "posX": 15.0, "posY": 5.0 },
+      { "monsterType": 1, "level": 1, "posX": 25.0, "posY": 5.0 },
+      { "monsterType": 1, "level": 1, "posX": -5.0, "posY": 15.0 },
+      { "monsterType": 2, "level": 1, "posX": 5.0, "posY": 15.0 },
+      { "monsterType": 1, "level": 1, "posX": 15.0, "posY": 15.0 },
+      { "monsterType": 2, "level": 1, "posX": 25.0, "posY": 15.0 },
+      { "monsterType": 2, "level": 1, "posX": -5.0, "posY": 25.0 },
+      { "monsterType": 1, "level": 1, "posX": 5.0, "posY": 25.0 },
+      { "monsterType": 2, "level": 1, "posX": 15.0, "posY": 25.0 },
+      { "monsterType": 1, "level": 1, "posX": 25.0, "posY": 25.0 }
+    ]
+  }
+]

@@ -34,9 +34,22 @@ struct SpawnEntryData
 	float posY = 0.f;
 };
 
-struct ZoneSpawnData
+struct RoomData
 {
-	int32 zoneId = 0;
+	int32 roomId = 0;
+	float originX = -10.f;
+	float originY = -10.f;
+	float zoneSize = 10.f;
+	float viewRadius = 4.5f;
+	float spawnPosX = -5.f;
+	float spawnPosY = -5.f;
+	int32 zoneCountX = 4;
+	int32 zoneCountY = 4;
+};
+
+struct RoomSpawnData
+{
+	int32 roomId = 0;
 	std::vector<SpawnEntryData> spawns;
 };
 
@@ -45,4 +58,5 @@ inline constexpr int32 DEFAULT_PLAYER_DATA_ID = 1;
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(MonsterData, id, name, maxHp, moveSpeed, attackDamage, attackRange)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(PlayerData, id, name, level, maxHp, moveSpeed, attackDamage, attackRange, attackCooldownMs)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(SpawnEntryData, monsterType, level, posX, posY)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ZoneSpawnData, zoneId, spawns)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RoomData, roomId, originX, originY, zoneSize, viewRadius, spawnPosX, spawnPosY, zoneCountX, zoneCountY)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RoomSpawnData, roomId, spawns)

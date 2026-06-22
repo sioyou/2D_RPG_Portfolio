@@ -4,7 +4,7 @@
 #include "Service.h"
 #include "GameSession.h"
 #include "ClientPacketHandler.h"
-#include "ZoneManager.h"
+#include "RoomManager.h"
 #include "Data/DataManager.h"
 
 enum
@@ -35,7 +35,7 @@ int main()
 		return -1;
 	}
 
-	GZoneManager.Init();
+	GRoomManager.Init();
 
 	ServerServiceRef service = MakeShared<ServerService>(
 		NetAddress(L"0.0.0.0", 7777),
